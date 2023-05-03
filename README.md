@@ -7,6 +7,37 @@ Device libraries for the Tillitis TKey
   Based on monocypher version 3.1.3.
   https://github.com/LoupVaillant/Monocypher
 
+## Minimal build
+
+You will typically need to link at least the `libcrt0` C runtime
+otherwise your program won't even reach `main()`.
+
+We provide a linker script in `apps.lds` which shows the linker the
+memory layout.
+
+Minimal compilation would look something like:
+
+```
+clang -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 \
+  -mcmodel=medany -static -std=gnu99 -O2 -ffast-math -fno-common \
+  -fno-builtin-printf -fno-builtin-putchar -nostdlib -mno-relax -flto \
+  -Wall -Werror=implicit-function-declaration \
+  -I ../tkey-libs/include \
+  -I ../tkey-libs -c -o foo.o foo.c
+
+clang -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 \
+  -mcmodel=medany -static -ffast-math -fno-common -nostdlib \
+  -T ../tkey-libs/app.lds \
+  -L ../tkey-libs/libcrt0/ -lcrt0 \
+  -I ../tkey-libs -o foo.elf foo.o
+
+```
+
+## Makefile example
+
+See `example-app/Makefile` for an example Makefile for a simple device
+application.
+
 ## Debug output
 
 If you're running the device app on our qemu emulator we have added a

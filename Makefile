@@ -65,4 +65,4 @@ checkfmt:
 
 .PHONY: update-mem-include
 update-mem-include:
-	cp -af ../../tillitis-key1/hw/application_fpga/fw/tk1_mem.h include/tk1_mem.h
+	cp -af ../tillitis-key1/hw/application_fpga/fw/tk1_mem.h include/tk1_mem.h

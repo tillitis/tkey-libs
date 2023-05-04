@@ -28,7 +28,7 @@ RM=/bin/rm
 all: libcrt0/libcrt0.a libcommon/libcommon.a monocypher/libmonocypher.a
 
 podman:
-	podman run --rm --mount type=bind,source=.,target=/src -w /src -it ghcr.io/tillitis/tkey-builder:1 make -j
+	podman run --rm --mount type=bind,source=$(CURDIR),target=/src -w /src -it ghcr.io/tillitis/tkey-builder:2 make -j
 
 # C runtime library
 libcrt0/libcrt0.a: libcrt0/crt0.o

@@ -21,8 +21,6 @@ ASFLAGS = -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 -mcmod
 
 LDFLAGS=-T app.lds -L libcommon/ -lcommon -L libcrt0/ -lcrt0
 
-RM=/bin/rm
-
 
 .PHONY: all
 all: libcrt0/libcrt0.a libcommon/libcommon.a monocypher/libmonocypher.a
@@ -50,8 +48,8 @@ LIBS=libcrt0/libcrt0.a libcommon/libcommon.a
 
 .PHONY: clean
 clean:
-	$(RM) -f $(LIBS) $(LIBOBJS) libcrt0/crt0.o
-	$(RM) -f monocypher/libmonocypher.a $(MONOOBJS)
+	rm -f $(LIBS) $(LIBOBJS) libcrt0/crt0.o
+	rm -f monocypher/libmonocypher.a $(MONOOBJS)
 
 # Uses ../.clang-format
 FMTFILES=include/*.h libcommon/*.c

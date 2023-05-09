@@ -1,6 +1,5 @@
 P := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 LIBDIR ?= $(P)/../
-RM=/bin/rm
 OBJCOPY ?= llvm-objcopy
 CC = clang
 CFLAGS = -g -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 -mcmodel=medany \
@@ -28,4 +27,4 @@ blue.elf: blue.o
 
 .PHONY: clean
 clean:
-	$(RM) -f blue.bin blue.elf $(BLUEOBJS)
+	rm -f blue.bin blue.elf $(BLUEOBJS)

@@ -1,3 +1,6 @@
+// Copyright (C) Tillitis AB
+// SPDX-License-Identifier: GPL-2.0-only
+
 #include <types.h>
 #include <tk1_mem.h>
 

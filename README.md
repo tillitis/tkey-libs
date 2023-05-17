@@ -1,3 +1,5 @@
+[![ci](https://github.com/tillitis/tkey-libs/actions/workflows/ci.yaml/badge.svg?branch=main&event=push)](https://github.com/tillitis/tkey-libs/actions/workflows/ci.yaml)
+
 # Device libraries for the Tillitis TKey
 
 - C runtime: libcrt0.

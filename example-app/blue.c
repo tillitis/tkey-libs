@@ -1,7 +1,7 @@
 // Copyright (C) Tillitis AB
 // SPDX-License-Identifier: GPL-2.0-only
 
-#include <types.h>
+#include <stdint.h>
 #include <tk1_mem.h>
 #include <qemu_debug.h>
 

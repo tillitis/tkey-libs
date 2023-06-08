@@ -4,7 +4,8 @@
 #ifndef LIB_H
 #define LIB_H
 
-#include <types.h>
+#include <stddef.h>
+#include <stdint.h>
 
 void *memset(void *dest, int c, unsigned n);
 void *memcpy(void *dest, const void *src, unsigned n);

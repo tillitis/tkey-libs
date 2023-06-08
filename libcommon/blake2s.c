@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: GPL-2.0-only
 
 #include <blake2s.h>
+#include <stdint.h>
 #include <tk1_mem.h>
-#include <types.h>
 
 typedef int (*fw_blake2s_p)(void *out, unsigned long outlen, const void *key,
 			    unsigned long keylen, const void *in,

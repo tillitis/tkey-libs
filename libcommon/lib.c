@@ -3,8 +3,8 @@
 
 #include <assert.h>
 #include <lib.h>
+#include <stdint.h>
 #include <tk1_mem.h>
-#include <types.h>
 
 void *memset(void *dest, int c, unsigned n)
 {

@@ -33,10 +33,10 @@ libcrt0/libcrt0.a: libcrt0/crt0.o
 	llvm-ar -qc $@ libcrt0/crt0.o
 
 # Common C functions
-LIBOBJS=libcommon/assert.o libcommon/lib.o libcommon/proto.o
+LIBOBJS=libcommon/assert.o libcommon/led.o libcommon/lib.o libcommon/proto.o
 libcommon/libcommon.a: $(LIBOBJS)
 	llvm-ar -qc $@ $(LIBOBJS)
-$(LIBOBJS): include/types.h include/tk1_mem.h include/lib.h include/proto.h
+$(LIBOBJS): include/types.h include/tk1_mem.h include/lib.h include/proto.h include/led.h include/assert.h
 
 # Monocypher
 MONOOBJS=monocypher/monocypher.o monocypher/monocypher-ed25519.o

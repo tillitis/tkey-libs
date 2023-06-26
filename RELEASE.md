@@ -1,5 +1,9 @@
 # Release notes
 
+## unrelease
+
+Upgraded Monocypher to 4.0.1.
+
 ## v0.0.1
 
 Just ripped from 

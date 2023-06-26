@@ -6,7 +6,7 @@
 - Common C function: libcommon.
 - Protocol functions: libproto.
 - Cryptographic functions: libmonocypher.
-  Based on monocypher version 3.1.3.
+  Based on monocypher version 4.0.1
   https://github.com/LoupVaillant/Monocypher
 
 Relase notes in [RELEASE.md](RELEASE.md).

@@ -5,6 +5,7 @@
 
 #include <assert.h>
 #include <lib.h>
+#include <qemu_debug.h>
 
 void assert_fail(const char *assertion, const char *file, unsigned int line,
 		 const char *function)

@@ -30,7 +30,7 @@ enum status {
 struct frame_header {
 	uint8_t id;
 	enum endpoints endpoint;
-	enum cmdlen len;
+	size_t len;
 };
 
 uint8_t genhdr(uint8_t id, uint8_t endpoint, uint8_t status, enum cmdlen len);

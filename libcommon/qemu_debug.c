@@ -7,7 +7,9 @@
 #include <types.h>
 
 #ifndef NODEBUG
-static volatile uint8_t *debugtx = (volatile uint8_t *)TK1_MMIO_QEMU_DEBUG;
+// clang-format off
+static volatile uint8_t* const debugtx = (volatile uint8_t *)TK1_MMIO_QEMU_DEBUG;
+// clang-format on
 
 int qemu_putchar(uint8_t ch)
 {

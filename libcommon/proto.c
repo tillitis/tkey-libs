@@ -6,10 +6,10 @@
 #include <tk1_mem.h>
 
 // clang-format off
-static volatile uint32_t *can_rx = (volatile uint32_t *)TK1_MMIO_UART_RX_STATUS;
-static volatile uint32_t *rx =     (volatile uint32_t *)TK1_MMIO_UART_RX_DATA;
-static volatile uint32_t *can_tx = (volatile uint32_t *)TK1_MMIO_UART_TX_STATUS;
-static volatile uint32_t *tx =     (volatile uint32_t *)TK1_MMIO_UART_TX_DATA;
+static volatile uint32_t* const can_rx = (volatile uint32_t *)TK1_MMIO_UART_RX_STATUS;
+static volatile uint32_t* const rx =     (volatile uint32_t *)TK1_MMIO_UART_RX_DATA;
+static volatile uint32_t* const can_tx = (volatile uint32_t *)TK1_MMIO_UART_TX_STATUS;
+static volatile uint32_t* const tx =     (volatile uint32_t *)TK1_MMIO_UART_TX_DATA;
 // clang-format on
 
 uint8_t genhdr(uint8_t id, uint8_t endpoint, uint8_t status, enum cmdlen len)

@@ -18,6 +18,4 @@ typedef struct {
 int blake2s(void *out, unsigned long outlen, const void *key,
 	    unsigned long keylen, const void *in, unsigned long inlen,
 	    blake2s_ctx *ctx);
-
 #endif
-

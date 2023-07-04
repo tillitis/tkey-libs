@@ -9,7 +9,7 @@
 #define LED_GREEN (1 << TK1_MMIO_TK1_LED_G_BIT)
 #define LED_BLUE  (1 << TK1_MMIO_TK1_LED_B_BIT)
 
-static volatile uint32_t *led = (volatile uint32_t *)TK1_MMIO_TK1_LED;
+static volatile uint32_t* const led = (volatile uint32_t *)TK1_MMIO_TK1_LED;
 
 void sleep(uint32_t n)
 {

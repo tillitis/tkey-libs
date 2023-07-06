@@ -3,8 +3,7 @@
 # Device libraries for the Tillitis TKey
 
 - C runtime: libcrt0.
-- Common C function: libcommon.
-- Protocol functions: libproto.
+- Common C functions including protocol calls: libcommon.
 - Cryptographic functions: libmonocypher.
   Based on monocypher version 4.0.1
   https://github.com/LoupVaillant/Monocypher

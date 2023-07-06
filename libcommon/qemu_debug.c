@@ -6,7 +6,6 @@
 #include <tk1_mem.h>
 #include <types.h>
 
-#ifndef NODEBUG
 // clang-format off
 static volatile uint8_t* const debugtx = (volatile uint8_t *)TK1_MMIO_QEMU_DEBUG;
 // clang-format on
@@ -103,4 +102,3 @@ void qemu_hexdump(uint8_t *buf, int len)
 
 	qemu_lf();
 }
-#endif

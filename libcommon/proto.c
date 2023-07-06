@@ -66,8 +66,6 @@ void writebyte(uint8_t b)
 
 void write(uint8_t *buf, size_t nbytes)
 {
-	qemu_puts("Sending: \n");
-	qemu_hexdump(buf, nbytes);
 	for (int i = 0; i < nbytes; i++) {
 		writebyte(buf[i]);
 	}

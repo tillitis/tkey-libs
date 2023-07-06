@@ -6,7 +6,7 @@
 
 #include <types.h>
 
-#ifdef NODEBUG
+#ifndef QEMU_DEBUG
 #define qemu_putchar(ch)
 #define qemu_lf()
 #define qemu_putinthex(n)

@@ -3,6 +3,7 @@
 
 #include <types.h>
 #include <tk1_mem.h>
+#include <qemu_debug.h>
 
 #define SLEEPTIME 100000
 #define LED_RED   (1 << TK1_MMIO_TK1_LED_R_BIT)
@@ -18,6 +19,11 @@ void sleep(uint32_t n)
 
 int main(void)
 {
+	qemu_puts("Hello, world!\n");
+	qemu_puts("Going to sleep between blinks: ");
+	qemu_putinthex(SLEEPTIME);
+	qemu_lf();
+
 	for (;;) {
 		*led = LED_RED;
 		sleep(SLEEPTIME);

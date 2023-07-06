@@ -7,7 +7,7 @@ CFLAGS = -g -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 -mcm
    -fno-builtin-putchar -nostdlib -mno-relax -flto \
    -Wall -Werror=implicit-function-declaration \
    -I $(LIBDIR)/include -I $(LIBDIR)  \
-   -DNODEBUG
+#   -D QEMU_DEBUG
 
 INCLUDE=$(LIBDIR)/include
 

@@ -98,7 +98,7 @@ clang -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 \
 clang -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 \
   -mcmodel=medany -static -ffast-math -fno-common -nostdlib \
   -T ../tkey-libs/app.lds \
-  -L ../tkey-libs/libcrt0/ -lcrt0 \
+  -L ../tkey-libs -lcrt0 \
   -I ../tkey-libs -o foo.elf foo.o
 
 ```

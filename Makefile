@@ -23,33 +23,37 @@ LDFLAGS=-T app.lds -L libcommon/ -lcommon -L libcrt0/ -lcrt0
 
 
 .PHONY: all
-all: libcrt0/libcrt0.a libcommon/libcommon.a monocypher/libmonocypher.a
+all: libcrt0.a libcommon.a libmonocypher.a
 
 podman:
 	podman run --rm --mount type=bind,source=$(CURDIR),target=/src -w /src -it ghcr.io/tillitis/tkey-builder:2 make -j
 
+.PHONY: check
+check:
+	clang-tidy -header-filter=.* -checks=cert-* libcommon/*.c -- $(CFLAGS)
+
 # C runtime library
-libcrt0/libcrt0.a: libcrt0/crt0.o
+libcrt0.a: libcrt0/crt0.o
 	llvm-ar -qc $@ libcrt0/crt0.o
 
 # Common C functions
 LIBOBJS=libcommon/assert.o libcommon/blake2s.o libcommon/led.o libcommon/lib.o libcommon/proto.o libcommon/qemu_debug.o
-libcommon/libcommon.a: $(LIBOBJS)
+libcommon.a: $(LIBOBJS)
 	llvm-ar -qc $@ $(LIBOBJS)
 $(LIBOBJS): include/blake2s.h include/types.h include/tk1_mem.h include/lib.h include/proto.h include/led.h include/assert.h include/qemu_debug.h
 
 # Monocypher
 MONOOBJS=monocypher/monocypher.o monocypher/monocypher-ed25519.o
-monocypher/libmonocypher.a: $(MONOOBJS)
+libmonocypher.a: $(MONOOBJS)
 	llvm-ar -qc $@ $(MONOOBJS)
 $MONOOBJS: monocypher/monocypher-ed25519.h monocypher/monocypher.h
 
-LIBS=libcrt0/libcrt0.a libcommon/libcommon.a
+LIBS=libcrt0.a libcommon.a
 
 .PHONY: clean
 clean:
 	rm -f $(LIBS) $(LIBOBJS) libcrt0/crt0.o
-	rm -f monocypher/libmonocypher.a $(MONOOBJS)
+	rm -f libmonocypher.a $(MONOOBJS)
 
 # Uses ../.clang-format
 FMTFILES=include/*.h libcommon/*.c

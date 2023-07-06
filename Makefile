@@ -12,9 +12,6 @@ CFLAGS = -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 -mcmode
    -Wall -Werror=implicit-function-declaration \
    -I $(INCLUDE) -I . \
    -DNODEBUG
-ifneq ($(TKEY_SIGNER_APP_NO_TOUCH),)
-CFLAGS := $(CFLAGS) -DTKEY_SIGNER_APP_NO_TOUCH
-endif
 
 AS = clang
 ASFLAGS = -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 -mcmodel=medany -mno-relax

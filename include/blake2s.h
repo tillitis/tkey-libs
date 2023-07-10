@@ -4,7 +4,8 @@
 #ifndef BLAKE2S_H
 #define BLAKE2S_H
 
-#include <types.h>
+#include <stddef.h>
+#include <stdint.h>
 
 // blake2s state context
 typedef struct {

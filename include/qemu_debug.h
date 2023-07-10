@@ -4,7 +4,7 @@
 #ifndef QEMU_DEBUG_H
 #define QEMU_DEBUG_H
 
-#include <types.h>
+#include <stdint.h>
 
 #ifdef NODEBUG
 #define qemu_putchar(ch)

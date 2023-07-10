@@ -3,8 +3,8 @@
 
 #include <lib.h>
 #include <qemu_debug.h>
+#include <stdint.h>
 #include <tk1_mem.h>
-#include <types.h>
 
 #ifndef NODEBUG
 // clang-format off

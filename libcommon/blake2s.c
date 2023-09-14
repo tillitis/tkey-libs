@@ -1,9 +1,9 @@
 // Copyright (C) Tillitis AB
 // SPDX-License-Identifier: GPL-2.0-only
 
-#include <blake2s.h>
 #include <stdint.h>
-#include <tk1_mem.h>
+#include <tkey/blake2s.h>
+#include <tkey/tk1_mem.h>
 
 typedef int (*fw_blake2s_p)(void *out, unsigned long outlen, const void *key,
 			    unsigned long keylen, const void *in,

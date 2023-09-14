@@ -1,9 +1,9 @@
 // Copyright (C) 2022, 2023 - Tillitis AB
 // SPDX-License-Identifier: GPL-2.0-only
 
-#include <proto.h>
-#include <qemu_debug.h>
-#include <tk1_mem.h>
+#include <tkey/proto.h>
+#include <tkey/qemu_debug.h>
+#include <tkey/tk1_mem.h>
 
 // clang-format off
 static volatile uint32_t* const can_rx = (volatile uint32_t *)TK1_MMIO_UART_RX_STATUS;

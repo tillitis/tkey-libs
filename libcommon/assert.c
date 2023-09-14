@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#include <assert.h>
-#include <lib.h>
-#include <qemu_debug.h>
+#include <tkey/assert.h>
+#include <tkey/lib.h>
+#include <tkey/qemu_debug.h>
 
 void assert_fail(const char *assertion, const char *file, unsigned int line,
 		 const char *function)

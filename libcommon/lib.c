@@ -1,10 +1,10 @@
 // Copyright (C) 2022 - Tillitis AB
 // SPDX-License-Identifier: GPL-2.0-only
 
-#include <assert.h>
-#include <lib.h>
 #include <stdint.h>
-#include <tk1_mem.h>
+#include <tkey/assert.h>
+#include <tkey/lib.h>
+#include <tkey/tk1_mem.h>
 
 void *memset(void *dest, int c, unsigned n)
 {

@@ -1,10 +1,10 @@
 // Copyright (C) - Tillitis AB
 // SPDX-License-Identifier: GPL-2.0-only
 
-#include <lib.h>
-#include <qemu_debug.h>
 #include <stdint.h>
-#include <tk1_mem.h>
+#include <tkey/lib.h>
+#include <tkey/qemu_debug.h>
+#include <tkey/tk1_mem.h>
 
 // clang-format off
 static volatile uint8_t* const debugtx = (volatile uint8_t *)TK1_MMIO_QEMU_DEBUG;

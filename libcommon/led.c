@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#include <led.h>
+#include <tkey/led.h>
 
 // clang-format off
 static volatile uint32_t* const led = (volatile uint32_t *)TK1_MMIO_TK1_LED;

@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: GPL-2.0-only
 
 #include <stdint.h>
-#include <tk1_mem.h>
-#include <qemu_debug.h>
+#include <tkey/tk1_mem.h>
+#include <tkey/qemu_debug.h>
 
 #define SLEEPTIME 100000
 #define LED_RED   (1 << TK1_MMIO_TK1_LED_R_BIT)

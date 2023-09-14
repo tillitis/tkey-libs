@@ -35,7 +35,7 @@ libcrt0.a: libcrt0/crt0.o
 LIBOBJS=libcommon/assert.o libcommon/blake2s.o libcommon/led.o libcommon/lib.o libcommon/proto.o libcommon/qemu_debug.o
 libcommon.a: $(LIBOBJS)
 	llvm-ar -qc $@ $(LIBOBJS)
-$(LIBOBJS): include/blake2s.h include/tk1_mem.h include/lib.h include/proto.h include/led.h include/assert.h include/qemu_debug.h
+$(LIBOBJS): include/tkey/blake2s.h include/tkey/tk1_mem.h include/tkey/lib.h include/tkey/proto.h include/tkey/led.h include/tkey/assert.h include/tkey/qemu_debug.h
 
 # Monocypher
 MONOOBJS=monocypher/monocypher.o monocypher/monocypher-ed25519.o
@@ -51,7 +51,7 @@ clean:
 	rm -f libmonocypher.a $(MONOOBJS)
 
 # Uses ../.clang-format
-FMTFILES=include/*.h libcommon/*.c
+FMTFILES=include/tkey/*.h libcommon/*.c
 .PHONY: fmt
 fmt:
 	clang-format --dry-run --ferror-limit=0 $(FMTFILES)

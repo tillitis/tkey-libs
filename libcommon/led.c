@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
+#include <stdint.h>
 #include <tkey/led.h>
 
 // clang-format off

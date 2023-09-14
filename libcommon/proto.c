@@ -64,7 +64,7 @@ void writebyte(uint8_t b)
 	}
 }
 
-void write(uint8_t *buf, size_t nbytes)
+void write(const uint8_t *buf, size_t nbytes)
 {
 	for (int i = 0; i < nbytes; i++) {
 		writebyte(buf[i]);

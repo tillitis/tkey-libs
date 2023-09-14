@@ -14,12 +14,12 @@
 #define qemu_puthex(ch)
 #define qemu_hexdump(buf, len)
 #else
-int qemu_putchar(uint8_t ch);
+int qemu_putchar(const uint8_t ch);
 void qemu_lf();
 void qemu_putinthex(const uint32_t n);
 void qemu_puts(const char *s);
-void qemu_puthex(uint8_t ch);
-void qemu_hexdump(uint8_t *buf, int len);
+void qemu_puthex(const uint8_t ch);
+void qemu_hexdump(const uint8_t *buf, int len);
 #endif
 
 #endif

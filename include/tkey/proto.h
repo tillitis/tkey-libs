@@ -37,7 +37,7 @@ struct frame_header {
 uint8_t genhdr(uint8_t id, uint8_t endpoint, uint8_t status, enum cmdlen len);
 int parseframe(uint8_t b, struct frame_header *hdr);
 void writebyte(uint8_t b);
-void write(uint8_t *buf, size_t nbytes);
+void write(const uint8_t *buf, size_t nbytes);
 uint8_t readbyte();
 void read(uint8_t *buf, size_t nbytes);
 

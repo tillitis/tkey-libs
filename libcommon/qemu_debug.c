@@ -10,7 +10,7 @@
 static volatile uint8_t* const debugtx = (volatile uint8_t *)TK1_MMIO_QEMU_DEBUG;
 // clang-format on
 
-int qemu_putchar(uint8_t ch)
+int qemu_putchar(const uint8_t ch)
 {
 	*debugtx = ch;
 
@@ -22,7 +22,7 @@ void qemu_lf()
 	qemu_putchar('\n');
 }
 
-static char hexnibble(uint8_t ch)
+static char hexnibble(const uint8_t ch)
 {
 	switch (ch) {
 	case 0x0:
@@ -62,7 +62,7 @@ static char hexnibble(uint8_t ch)
 	return '0';
 }
 
-void qemu_puthex(uint8_t ch)
+void qemu_puthex(const uint8_t ch)
 {
 	qemu_putchar(hexnibble(ch >> 4 & 0x0f));
 	qemu_putchar(hexnibble(ch & 0x0f));
@@ -85,7 +85,7 @@ void qemu_puts(const char *s)
 		qemu_putchar(*s++);
 }
 
-void qemu_hexdump(uint8_t *buf, int len)
+void qemu_hexdump(const uint8_t *buf, int len)
 {
 	uint8_t *byte_buf = (uint8_t *)buf;
 

@@ -82,9 +82,15 @@ uint8_t readbyte()
 	}
 }
 
-void read(uint8_t *buf, size_t nbytes)
+int read(uint8_t *buf, size_t bufsize, size_t nbytes)
 {
+	if (nbytes > bufsize) {
+		return -1;
+	}
+
 	for (int n = 0; n < nbytes; n++) {
 		buf[n] = readbyte();
 	}
+
+	return 0;
 }

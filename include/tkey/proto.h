@@ -39,6 +39,5 @@ int parseframe(uint8_t b, struct frame_header *hdr);
 void writebyte(uint8_t b);
 void write(const uint8_t *buf, size_t nbytes);
 uint8_t readbyte();
-void read(uint8_t *buf, size_t nbytes);
-
+int read(uint8_t *buf, size_t bufsize, size_t nbytes);
 #endif

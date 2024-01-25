@@ -1,4 +1,4 @@
-// Monocypher version 4.0.1
+// Monocypher version 4.0.2
 //
 // This file is dual-licensed.  Choose whichever licence you want from
 // the two licences listed below.
@@ -54,8 +54,8 @@
 #ifndef MONOCYPHER_H
 #define MONOCYPHER_H
 
-#include <stdint.h>
 #include <stddef.h>
+#include <stdint.h>
 
 #ifdef MONOCYPHER_CPP_NAMESPACE
 namespace MONOCYPHER_CPP_NAMESPACE {

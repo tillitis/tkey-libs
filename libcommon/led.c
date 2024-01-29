@@ -10,17 +10,22 @@
 static volatile uint32_t* const led = (volatile uint32_t *)TK1_MMIO_TK1_LED;
 // clang-format on
 
-void set_led(uint32_t led_value)
+void led_set(uint32_t ledvalue)
 {
-	*led = led_value;
+	*led = ledvalue;
 }
 
-void forever_redflash()
+uint32_t led_get()
+{
+	return *led;
+}
+
+void led_flash_forever(uint32_t ledvalue)
 {
 	int led_on = 0;
 
 	for (;;) {
-		*led = led_on ? LED_RED : LED_BLACK;
+		*led = led_on ? ledvalue : LED_BLACK;
 		for (volatile int i = 0; i < 800000; i++) {
 		}
 		led_on = !led_on;

@@ -4,15 +4,15 @@ CC = clang
 
 INCLUDE=include
 
-CFLAGS = -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 -mcmodel=medany \
-   -static -std=gnu99 -O2 -ffast-math -fno-common -fno-builtin-printf \
-   -fno-builtin-putchar -nostdlib -mno-relax -flto \
-   -Wall -Werror=implicit-function-declaration \
-   -I $(INCLUDE) -I . \
-   -D QEMU_DEBUG
+CFLAGS = -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 \
+	-mcmodel=medany -static -std=gnu99 -O2 -ffast-math -fno-common \
+	-fno-builtin-printf -fno-builtin-putchar -nostdlib -mno-relax -flto \
+	-Wall -Werror=implicit-function-declaration \
+	-I $(INCLUDE) -I . -D QEMU_DEBUG
 
 AS = clang
-ASFLAGS = -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 -mcmodel=medany -mno-relax
+ASFLAGS = -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 \
+	-mcmodel=medany -mno-relax
 
 LDFLAGS=-T app.lds -L libcommon/ -lcommon -L libcrt0/ -lcrt0
 
@@ -21,7 +21,8 @@ LDFLAGS=-T app.lds -L libcommon/ -lcommon -L libcrt0/ -lcrt0
 all: libcrt0.a libcommon.a libmonocypher.a
 
 podman:
-	podman run --rm --mount type=bind,source=$(CURDIR),target=/src -w /src -it ghcr.io/tillitis/tkey-builder:2 make -j
+	podman run --rm --mount type=bind,source=$(CURDIR),target=/src \
+	-w /src -it ghcr.io/tillitis/tkey-builder:2 make -j
 
 .PHONY: check
 check:
@@ -32,10 +33,13 @@ libcrt0.a: libcrt0/crt0.o
 	llvm-ar -qc $@ libcrt0/crt0.o
 
 # Common C functions
-LIBOBJS=libcommon/assert.o libcommon/blake2s.o libcommon/led.o libcommon/lib.o libcommon/proto.o libcommon/touch.o libcommon/qemu_debug.o
+LIBOBJS=libcommon/assert.o libcommon/blake2s.o libcommon/led.o libcommon/lib.o \
+	libcommon/proto.o libcommon/touch.o libcommon/qemu_debug.o
 libcommon.a: $(LIBOBJS)
 	llvm-ar -qc $@ $(LIBOBJS)
-$(LIBOBJS): include/tkey/blake2s.h include/tkey/tk1_mem.h include/tkey/lib.h include/tkey/proto.h include/tkey/led.h include/tkey/assert.h include/tkey/qemu_debug.h include/tkey/touch.h
+$(LIBOBJS): include/tkey/assert.h include/tkey/blake2s.h  include/tkey/led.h \
+	include/tkey/lib.h include/tkey/proto.h include/tkey/tk1_mem.h \
+	include/tkey/touch.h include/tkey/qemu_debug.h 
 
 # Monocypher
 MONOOBJS=monocypher/monocypher.o monocypher/monocypher-ed25519.o
@@ -62,4 +66,5 @@ checkfmt:
 
 .PHONY: update-mem-include
 update-mem-include:
-	cp -af ../tillitis-key1/hw/application_fpga/fw/tk1_mem.h include/tk1_mem.h
+	cp -af ../tillitis-key1/hw/application_fpga/fw/tk1_mem.h \
+	include/tk1_mem.h

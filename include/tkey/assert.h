@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#ifndef ASSERT_H
-#define ASSERT_H
+#ifndef TKEY_ASSERT_H
+#define TKEY_ASSERT_H
 
 #define assert(expr)                                                           \
 	((expr) ? (void)(0) : assert_fail(#expr, __FILE__, __LINE__, __func__))

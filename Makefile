@@ -39,7 +39,7 @@ libcommon.a: $(LIBOBJS)
 	llvm-ar -qc $@ $(LIBOBJS)
 $(LIBOBJS): include/tkey/assert.h include/tkey/blake2s.h  include/tkey/led.h \
 	include/tkey/lib.h include/tkey/proto.h include/tkey/tk1_mem.h \
-	include/tkey/touch.h include/tkey/qemu_debug.h 
+	include/tkey/touch.h include/tkey/qemu_debug.h
 
 # Monocypher
 MONOOBJS=monocypher/monocypher.o monocypher/monocypher-ed25519.o
@@ -67,4 +67,5 @@ checkfmt:
 .PHONY: update-mem-include
 update-mem-include:
 	cp -af ../tillitis-key1/hw/application_fpga/fw/tk1_mem.h \
-	include/tk1_mem.h
+	include/tkey/tk1_mem.h
+	echo "Remember to update header include guard!"

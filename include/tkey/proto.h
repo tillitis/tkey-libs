@@ -4,8 +4,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#ifndef PROTO_H
-#define PROTO_H
+#ifndef TKEY_PROTO_H
+#define TKEY_PROTO_H
 
 enum endpoints {
 	DST_HW_IFPGA = 0x00,

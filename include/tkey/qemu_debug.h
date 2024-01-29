@@ -1,8 +1,8 @@
 // Copyright (C) 2023 - Tillitis AB
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef QEMU_DEBUG_H
-#define QEMU_DEBUG_H
+#ifndef TKEY_QEMU_DEBUG_H
+#define TKEY_QEMU_DEBUG_H
 
 #include <stdint.h>
 

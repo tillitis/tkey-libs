@@ -7,8 +7,8 @@
 
 // clang-format off
 
-#ifndef TK1_MEM_H
-#define TK1_MEM_H
+#ifndef TKEY_TK1_MEM_H
+#define TKEY_TK1_MEM_H
 
 // The canonical location of this file is:
 // repo: https://github.com/tillitis/tillitis-key1

@@ -1,8 +1,8 @@
 // Copyright (C) Tillitis AB
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef BLAKE2S_H
-#define BLAKE2S_H
+#ifndef TKEY_BLAKE2S_H
+#define TKEY_BLAKE2S_H
 
 #include <stddef.h>
 #include <stdint.h>

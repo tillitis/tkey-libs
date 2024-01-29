@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#ifndef LED_H
-#define LED_H
+#ifndef TKEY_LED_H
+#define TKEY_LED_H
 
 #include <stdint.h>
 #include <tkey/tk1_mem.h>

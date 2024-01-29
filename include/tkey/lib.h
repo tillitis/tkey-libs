@@ -1,8 +1,8 @@
 // Copyright (C) 2022 - Tillitis AB
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef LIB_H
-#define LIB_H
+#ifndef TKEY_LIB_H
+#define TKEY_LIB_H
 
 #include <stddef.h>
 #include <stdint.h>

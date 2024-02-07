@@ -11,6 +11,7 @@ CFLAGS = -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 \
 	-I $(INCLUDE) -I . -D QEMU_DEBUG
 
 AS = clang
+AR = llvm-ar
 ASFLAGS = -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 \
 	-mcmodel=medany -mno-relax
 
@@ -30,13 +31,13 @@ check:
 
 # C runtime library
 libcrt0.a: libcrt0/crt0.o
-	llvm-ar -qc $@ libcrt0/crt0.o
+	$(AR) -qc $@ libcrt0/crt0.o
 
 # Common C functions
 LIBOBJS=libcommon/assert.o libcommon/blake2s.o libcommon/led.o libcommon/lib.o \
 	libcommon/proto.o libcommon/touch.o libcommon/qemu_debug.o
 libcommon.a: $(LIBOBJS)
-	llvm-ar -qc $@ $(LIBOBJS)
+	$(AR) -qc $@ $(LIBOBJS)
 $(LIBOBJS): include/tkey/assert.h include/tkey/blake2s.h  include/tkey/led.h \
 	include/tkey/lib.h include/tkey/proto.h include/tkey/tk1_mem.h \
 	include/tkey/touch.h include/tkey/qemu_debug.h
@@ -44,7 +45,7 @@ $(LIBOBJS): include/tkey/assert.h include/tkey/blake2s.h  include/tkey/led.h \
 # Monocypher
 MONOOBJS=monocypher/monocypher.o monocypher/monocypher-ed25519.o
 libmonocypher.a: $(MONOOBJS)
-	llvm-ar -qc $@ $(MONOOBJS)
+	$(AR) -qc $@ $(MONOOBJS)
 $MONOOBJS: monocypher/monocypher-ed25519.h monocypher/monocypher.h
 
 LIBS=libcrt0.a libcommon.a

@@ -24,4 +24,5 @@ void assert_fail(const char *assertion, const char *file, unsigned int line,
 	asm volatile("unimp");
 
 	// Not reached
+	__builtin_unreachable();
 }

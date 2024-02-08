@@ -40,4 +40,6 @@ void writebyte(uint8_t b);
 void write(const uint8_t *buf, size_t nbytes);
 uint8_t readbyte();
 int read(uint8_t *buf, size_t bufsize, size_t nbytes);
+size_t read_timeout(uint8_t *buf, size_t nbytes, uint32_t timeout,
+		    uint32_t prescaler);
 #endif

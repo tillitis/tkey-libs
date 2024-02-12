@@ -16,7 +16,7 @@ jobs:
       image: ghcr.io/tillitis/tkey-builder:2
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           # fetch-depth: 0
           persist-credentials: false
@@ -34,3 +34,17 @@ jobs:
 
       - name: check for SPDX tags
         run: ./tools/spdx-ensure
+
+      - name: Archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: tkey-libs
+          retention-days: 2
+          path: |
+            README-DIST.txt
+            app.lds
+            LICENSE
+            include/*
+            *.a
+            monocypher/*.h
+            monocypher/LICENSE

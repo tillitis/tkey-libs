@@ -20,6 +20,7 @@ missingok_files=(
 LICENSE
 Makefile
 README.md
+README-DIST.txt
 RELEASE.md
 example-app/Makefile
 monocypher/LICENSE

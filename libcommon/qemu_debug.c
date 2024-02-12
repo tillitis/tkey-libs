@@ -1,6 +1,7 @@
 // Copyright (C) - Tillitis AB
 // SPDX-License-Identifier: GPL-2.0-only
 
+#ifdef QEMU_DEBUG
 #include <stdint.h>
 #include <tkey/lib.h>
 #include <tkey/qemu_debug.h>
@@ -102,3 +103,4 @@ void qemu_hexdump(const uint8_t *buf, int len)
 
 	qemu_lf();
 }
+#endif

@@ -26,6 +26,7 @@ Changes:
 - Add variable AR in Makefile to enabling passing llvm-ar from command
   line.
 - Update example app to use led.h.
+- Don't have QEMU debug enabled by default.
 - Minor tweaks and formatting.
 
 Full changelog:

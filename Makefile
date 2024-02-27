@@ -4,11 +4,12 @@ CC = clang
 
 INCLUDE=include
 
+# Note that QEMU_DEBUG needs to be defined!
 CFLAGS = -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 \
 	-mcmodel=medany -static -std=gnu99 -O2 -ffast-math -fno-common \
 	-fno-builtin-printf -fno-builtin-putchar -nostdlib -mno-relax -flto \
 	-Wall -Werror=implicit-function-declaration \
-	-I $(INCLUDE) -I . # -D QEMU_DEBUG
+	-I $(INCLUDE) -I . -D QEMU_DEBUG
 
 AS = clang
 AR = llvm-ar

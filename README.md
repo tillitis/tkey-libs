@@ -118,9 +118,10 @@ there will be printed as a character by qemu on the console.
 and friends (see `include/tkey/qemu_debug.h` for list of functions)
 use this debug port to print stuff.
 
-If you want to use these, define QEMU_DEBUG when compiling your
+If you want to use these, define `QEMU_DEBUG` when compiling your
 program, othwerwise all `qemu_*()` functions in your program are
 removed by the C pre-processor.
 
 `tkey-libs` own use of `qemu_*()` is limited to output from
-`assert()`.
+`assert()`. This means that `QEMU_DEBUG` should be defined when
+compiling `tkey-libs` itself!

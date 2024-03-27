@@ -1,5 +1,27 @@
 # Release notes
 
+## v0.1.1
+
+This is a minor release correcting a mistake and syncing with the
+latest HW release, TK1-23.03.
+
+
+Note: There is a possibility that this update may impact the generated
+CDI for an app that relies on this library. It is recommended to
+always check for potential CDI changes for each specific app with
+every update. If the generated CDI does change, and if applicable, it
+should be clearly communicated to end users to prevent unintentional
+changes to their identity.
+
+Changes:
+- Update memory map, tk1_mem.h, to match the latest TK1-24.03 release.
+- Default to tkey-builder:4 for the podman target
+- Default to have QEMU debug enabled in tkey-libs. Mistakenly removed
+  in previous release.
+- Revise readme accordingly
+
+Full changelog:
+[v0.1.0...v0.1.1](https://github.com/tillitis/tkey-libs/compare/v0.1.0...v0.1.1)
 
 ## v0.1.0
 

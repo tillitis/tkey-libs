@@ -22,9 +22,11 @@ LDFLAGS=-T app.lds -L libcommon/ -lcommon -L libcrt0/ -lcrt0
 .PHONY: all
 all: libcrt0.a libcommon.a libmonocypher.a
 
+IMAGE=ghcr.io/tillitis/tkey-builder:4
+
 podman:
 	podman run --rm --mount type=bind,source=$(CURDIR),target=/src \
-	-w /src -it ghcr.io/tillitis/tkey-builder:2 make -j
+	-w /src -it $(IMAGE) make -j
 
 .PHONY: check
 check:

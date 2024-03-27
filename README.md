@@ -5,7 +5,7 @@
 - C runtime: libcrt0.
 - Common C functions including protocol calls: libcommon.
 - Cryptographic functions: libmonocypher.
-  Based on monocypher version 4.0.1
+  Based on monocypher version 4.0.2
   https://github.com/LoupVaillant/Monocypher
 
 Relase notes in [RELEASE.md](RELEASE.md).
@@ -50,20 +50,17 @@ the SPDX License List at:
 https://spdx.org/licenses/
 
 ## Building
+In order to build, you must have the `make`, `clang`, `llvm`, and
+`lld` packages installed.
 
-To build you need at least `make`, `clang`, `llvm`, and `lld` packages installed. 
-
-Version 15 or later of LLVM/Clang is required for the RV32IC\_Zmmul
-architecture we use. Ubuntu 22.10 (Kinetic) is known to work. Please
-see
-[toolchain_setup.md](https://github.com/tillitis/tillitis-key1/blob/main/doc/toolchain_setup.md)
-(in the tillitis-key1 repository) for detailed information on the
-currently supported build and development environment.
-
-## Building using podman
+Version 15 or higher of LLVM/Clang is necessary for the RV32IC\_Zmmul
+architecture we are using. For more detailed information on the
+supported build and development environment, please refer to the
+[Developer Handbook](https://dev.tillitis.se/).
+## Building using Podman
 
 You can also build the libraries with our OCI image
-`ghcr.io/tillitis/tkey-builder`. 
+`ghcr.io/tillitis/tkey-builder`.
 
 The easiest way to build this is if you have `make` installed:
 
@@ -71,10 +68,13 @@ The easiest way to build this is if you have `make` installed:
 make podman
 ```
 
-Or use podman directly:
+You can also specify a different image by using
+`IMAGE=localhost/tkey-builder-local`.
+
+Or use Podman directly:
 
 ```
-podman run --rm --mount type=bind,source=.,target=/src -w /src -it ghcr.io/tillitis/tkey-builder:1 make -j
+podman run --rm --mount type=bind,source=.,target=/src -w /src -it ghcr.io/tillitis/tkey-builder:4 make -j
 ```
 
 ## Minimal application build

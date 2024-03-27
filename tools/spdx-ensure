@@ -15,8 +15,9 @@ missingok_dirs=(
 )
 
 missingok_files=(
-.gitignore    
 .clang-format
+.editorconfig
+.gitignore
 LICENSE
 Makefile
 README.md

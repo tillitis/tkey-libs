@@ -16,11 +16,12 @@ static volatile uint32_t *timer		  = (volatile uint32_t *)TK1_MMIO_TIMER_TIMER;
 static volatile uint32_t *timer_prescaler = (volatile uint32_t *)TK1_MMIO_TIMER_PRESCALER;
 static volatile uint32_t *timer_status	  = (volatile uint32_t *)TK1_MMIO_TIMER_STATUS;
 static volatile uint32_t *timer_ctrl	  = (volatile uint32_t *)TK1_MMIO_TIMER_CTRL;
-static volatile uint32_t *touch		  = (volatile uint32_t *)TK1_MMIO_TOUCH_STATUS;
+static volatile uint32_t *touch_status		  = (volatile uint32_t *)TK1_MMIO_TOUCH_STATUS;
+static volatile uint32_t *touch_present	  = (volatile uint32_t *)TK1_MMIO_TOUCH_PRESENT;
 // clang-format on
 
 // Returns !0 if touch sensor has been touched
-#define touched() (*touch & (1 << TK1_MMIO_TOUCH_STATUS_EVENT_BIT))
+#define touched() (*touch_status & (1 << TK1_MMIO_TOUCH_STATUS_EVENT_BIT))
 
 bool touch_wait(int color, int timeout_s)
 {
@@ -38,7 +39,7 @@ bool touch_wait(int color, int timeout_s)
 
 	// Acknowledge any stray touch events before waiting for real
 	// touch
-	*touch = 0;
+	*touch_status = 0;
 
 	// Blink until either the touch sensor has been touched or the
 	// timer hits 0.
@@ -63,7 +64,12 @@ bool touch_wait(int color, int timeout_s)
 	*timer_ctrl |= (1 << TK1_MMIO_TIMER_CTRL_STOP_BIT);
 
 	// Confirm touch event
-	*touch = 0;
+	*touch_status = 0;
 
 	return true;
+}
+
+int touch()
+{
+	return *touch_present & (1 << TK1_MMIO_TOUCH_PRESENT_BIT);
 }

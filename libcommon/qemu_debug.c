@@ -95,7 +95,7 @@ void qemu_hexdump(const uint8_t *buf, int len)
 			(void)qemu_putchar(' ');
 		}
 
-		if (i != 1 && i % 16 == 1) {
+		if ((i + 1) % 16 == 0) {
 			qemu_lf();
 		}
 	}

@@ -1,5 +1,5 @@
 // Copyright (C) Tillitis AB
-// SPDX-License-Identifier: GPL-2.0-only
+// SPDX-License-Identifier: BSD-2-Clause
 
 #ifndef TKEY_BLAKE2S_H
 #define TKEY_BLAKE2S_H

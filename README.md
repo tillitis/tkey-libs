@@ -8,30 +8,14 @@
   Based on monocypher version 4.0.2
   https://github.com/LoupVaillant/Monocypher
 
-Relase notes in [RELEASE.md](RELEASE.md).
+Release notes in [RELEASE.md](RELEASE.md).
 
 ## Licenses and SPDX tags
+Unless otherwise noted, the project sources are copyright Tillitis AB,
+licensed under the terms and conditions of the "BSD-2-Clause" license.
+See [LICENSE](LICENSE) for the full license text.
 
-Unless otherwise noted, the project sources are licensed under the
-terms and conditions of the "GNU General Public License v2.0 only":
-
-> Copyright Tillitis AB.
->
-> These programs are free software: you can redistribute it and/or
-> modify it under the terms of the GNU General Public License as
-> published by the Free Software Foundation, version 2 only.
->
-> These programs are distributed in the hope that they will be useful,
-> but WITHOUT ANY WARRANTY; without even the implied warranty of
-> MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-> General Public License for more details.
-
-> You should have received a copy of the GNU General Public License
-> along with this program. If not, see:
->
-> https://www.gnu.org/licenses
-
-See [LICENSE](LICENSE) for the full GPLv2-only license text.
+Until Oct 8, 2024, the license was GPL-2.0 Only.
 
 External source code we have imported are isolated in their own
 directories. They may be released under other licenses. This is noted
@@ -119,7 +103,7 @@ and friends (see `include/tkey/qemu_debug.h` for list of functions)
 use this debug port to print stuff.
 
 If you want to use these, define `QEMU_DEBUG` when compiling your
-program, othwerwise all `qemu_*()` functions in your program are
+program, otherwise all `qemu_*()` functions in your program are
 removed by the C pre-processor.
 
 `tkey-libs` own use of `qemu_*()` is limited to output from

@@ -33,6 +33,9 @@ the SPDX License List at:
 
 https://spdx.org/licenses/
 
+We attempt to follow the [REUSE
+specification](https://reuse.software/).
+
 ## Building
 In order to build, you must have the `make`, `clang`, `llvm`, and
 `lld` packages installed.

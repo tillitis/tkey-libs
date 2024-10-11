@@ -1,4 +1,4 @@
-// Copyright (C) Tillitis AB
+// SPDX-FileCopyrightText: 2023 Tillitis AB <tillitis.se>
 // SPDX-License-Identifier: BSD-2-Clause
 
 #ifndef TKEY_BLAKE2S_H

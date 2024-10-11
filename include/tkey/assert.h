@@ -1,7 +1,5 @@
-/*
- * Copyright (C) 2022, 2023 - Tillitis AB
- * SPDX-License-Identifier: BSD-2-Clause
- */
+// SPDX-FileCopyrightText: 2022 Tillitis AB <tillitis.se>
+// SPDX-License-Identifier: BSD-2-Clause
 
 #ifndef TKEY_ASSERT_H
 #define TKEY_ASSERT_H

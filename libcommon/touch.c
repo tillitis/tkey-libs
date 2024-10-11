@@ -1,7 +1,5 @@
-/*
- * Copyright (C) 2023 - Tillitis AB
- * SPDX-License-Identifier: BSD-2-Clause
- */
+// SPDX-FileCopyrightText: 2023 Tillitis AB <tillitis.se>
+// SPDX-License-Identifier: BSD-2-Clause
 
 #include <stdbool.h>
 #include <tkey/led.h>

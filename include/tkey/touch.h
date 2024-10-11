@@ -6,6 +6,7 @@
 #ifndef TKEY_TOUCH_H
 #define TKEY_TOUCH_H
 
+#include <stdbool.h>
 #include <stdint.h>
 #include <tkey/tk1_mem.h>
 

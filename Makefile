@@ -58,6 +58,13 @@ clean:
 	rm -f $(LIBS) $(LIBOBJS) libcrt0/crt0.o
 	rm -f libmonocypher.a $(MONOOBJS)
 
+# Create compile_commands.json for clangd and LSP
+.PHONY: clangd
+clangd: compile_commands.json
+compile_commands.json:
+	$(MAKE) clean
+	bear -- make all
+
 # Uses ../.clang-format
 FMTFILES=include/tkey/*.h libcommon/*.c
 .PHONY: fmt

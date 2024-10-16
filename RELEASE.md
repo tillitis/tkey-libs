@@ -1,5 +1,28 @@
 # Release notes
 
+## v0.1.2
+
+From now on tkey-libs is licensed under the BSD-2-Clause license,
+moving from the previous GPLv2-only.
+
+Note: There is a possibility that this update may impact the generated
+CDI for an app that relies on this library. It is recommended to
+always check for potential CDI changes for each specific app with
+every update. If the generated CDI does change, and if applicable, it
+should be clearly communicated to end users to prevent unintentional
+changes to their identity.
+
+Changes:
+- New license, BSD-2-Clause
+- Reuse compliant, see https://reuse.software/
+- Fix row alignment in qemu_hexdump
+- Update memory map, tk1_mem.h, from canonical tillitis-key1 repo
+- Added make target for creating compile_commands.json for clangd
+- Added missing include in touch.h
+
+Full changelog:
+[v0.1.1...v0.1.2](https://github.com/tillitis/tkey-libs/compare/v0.1.1...v0.1.2)
+
 ## v0.1.1
 
 This is a minor release correcting a mistake and syncing with the

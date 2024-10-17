@@ -29,6 +29,10 @@ jobs:
       - name: make
         run: make
 
+      - name: build test app
+        working-directory: example-app
+        run: make
+
       - name: check fmt of c code
         run: make checkfmt
 

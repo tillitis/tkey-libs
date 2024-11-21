@@ -14,7 +14,7 @@ static volatile uint32_t* const can_tx = (volatile uint32_t *)TK1_MMIO_UART_TX_S
 static volatile uint32_t* const tx =     (volatile uint32_t *)TK1_MMIO_UART_TX_DATA;
 // clang-format on
 
-uint8_t genhdr(uint8_t id, uint8_t endpoint, uint8_t status, enum cmdlen len)
+uint8_t genhdr(uint8_t id, enum endpoints endpoint, uint8_t status, enum cmdlen len)
 {
 	return (id << 5) | (endpoint << 3) | (status << 2) | len;
 }

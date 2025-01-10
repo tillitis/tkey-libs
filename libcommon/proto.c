@@ -73,7 +73,7 @@ void write(const uint8_t *buf, size_t nbytes)
 	}
 }
 
-uint8_t readbyte()
+uint8_t readbyte_(void)
 {
 	for (;;) {
 		if (*can_rx) {
@@ -82,14 +82,30 @@ uint8_t readbyte()
 	}
 }
 
-int read(uint8_t *buf, size_t bufsize, size_t nbytes)
+uint8_t readbyte(uint8_t *mode, uint8_t *mode_bytes_left)
+{
+	if (*mode_bytes_left == 0) {
+		*mode = readbyte_();
+		if (*mode != MODE_CDC) {
+			qemu_puts("We only support MODE_CDC\n");
+		} else {
+			*mode_bytes_left = readbyte_();
+		}
+	}
+	uint8_t b = readbyte_();
+	*mode_bytes_left -= 1;
+	return b;
+}
+
+int read(uint8_t *buf, size_t bufsize, size_t nbytes, uint8_t *mode,
+	 uint8_t *mode_bytes_left)
 {
 	if (nbytes > bufsize) {
 		return -1;
 	}
 
 	for (int n = 0; n < nbytes; n++) {
-		buf[n] = readbyte();
+		buf[n] = readbyte(mode, mode_bytes_left);
 	}
 
 	return 0;

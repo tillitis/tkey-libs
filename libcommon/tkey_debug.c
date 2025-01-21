@@ -12,6 +12,8 @@
 
 #include <tkey/debug.h>
 
+#define USB_PACKET_SIZE 64
+
 // clang-format off
 static volatile uint32_t *can_tx = (volatile uint32_t *)TK1_MMIO_UART_TX_STATUS;
 static volatile uint32_t *tx =     (volatile uint32_t *)TK1_MMIO_UART_TX_DATA;
@@ -125,12 +127,21 @@ void tkey_putinthex(const uint32_t n)
 
 void tkey_puts(const char *s)
 {
-	size_t len = strlen(s); /* TODO: Fix splitup of lengths longer than
-					255 to multiple strings */
+	size_t remaining = strlen(s);
 
-	tkey_writebyte(MODE_TKEYCTRL);
-	tkey_writebyte(len);
-	tkey_write((const uint8_t *)s, len);
+	while (remaining > 0) {
+		uint8_t len =
+		    (remaining < USB_PACKET_SIZE) ? remaining : USB_PACKET_SIZE;
+		// Send header
+		tkey_writebyte(MODE_TKEYCTRL);
+		tkey_writebyte(len);
+
+		// Send chunk data
+		tkey_write((const uint8_t *)s, len);
+
+		s += len;
+		remaining -= len;
+	}
 }
 
 void tkey_hexdump(const uint8_t *buf, int len)

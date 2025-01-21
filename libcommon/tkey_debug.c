@@ -132,12 +132,9 @@ void tkey_puts(const char *s)
 	while (remaining > 0) {
 		uint8_t len =
 		    (remaining < USB_PACKET_SIZE) ? remaining : USB_PACKET_SIZE;
-		// Send header
-		tkey_writebyte(MODE_TKEYCTRL);
-		tkey_writebyte(len);
 
 		// Send chunk data
-		tkey_write((const uint8_t *)s, len);
+		tkey_write_with_header((const uint8_t *)s, len);
 
 		s += len;
 		remaining -= len;

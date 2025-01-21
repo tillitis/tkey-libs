@@ -123,17 +123,9 @@ void tkey_putinthex(const uint32_t n)
 	}
 }
 
-size_t tkey_strlen(const char *str)
-{
-	register const char *s;
-	for (s = str; *s; ++s)
-		;
-	return (s - str);
-}
-
 void tkey_puts(const char *s)
 {
-	size_t len = tkey_strlen(s); /* TODO: Fix splitup of lengths longer than
+	size_t len = strlen(s); /* TODO: Fix splitup of lengths longer than
 					255 to multiple strings */
 
 	tkey_writebyte(MODE_TKEYCTRL);

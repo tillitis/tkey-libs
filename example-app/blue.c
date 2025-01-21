@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <tkey/led.h>
 #include <tkey/tk1_mem.h>
-#include <tkey/qemu_debug.h>
+#include <tkey/debug.h>
 
 #define SLEEPTIME 100000
 
@@ -15,10 +15,10 @@ void sleep(uint32_t n)
 
 int main(void)
 {
-	qemu_puts("Hello, world!\n");
-	qemu_puts("Going to sleep between blinks: ");
-	qemu_putinthex(SLEEPTIME);
-	qemu_lf();
+	debug_puts("Hello, world!\n");
+	debug_puts("Going to sleep between blinks: ");
+	debug_putinthex(SLEEPTIME);
+	debug_lf();
 
 	for (;;) {
 		led_set(LED_RED);

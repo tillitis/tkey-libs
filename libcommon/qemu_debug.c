@@ -3,18 +3,21 @@
 
 #include <stdint.h>
 #include <tkey/lib.h>
-#include <tkey/qemu_debug.h>
 #include <tkey/tk1_mem.h>
+
+#ifndef QEMU_DEBUG
+#define QEMU_DEBUG
+#endif
+
+#include <tkey/debug.h>
 
 // clang-format off
 static volatile uint8_t* const debugtx = (volatile uint8_t *)TK1_MMIO_QEMU_DEBUG;
 // clang-format on
 
-int qemu_putchar(const uint8_t ch)
+void qemu_putchar(const uint8_t ch)
 {
 	*debugtx = ch;
-
-	return ch;
 }
 
 void qemu_lf()
@@ -92,7 +95,7 @@ void qemu_hexdump(const uint8_t *buf, int len)
 	for (int i = 0; i < len; i++) {
 		qemu_puthex(byte_buf[i]);
 		if (i % 2 == 1) {
-			(void)qemu_putchar(' ');
+			qemu_putchar(' ');
 		}
 
 		if ((i + 1) % 16 == 0) {

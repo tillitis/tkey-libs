@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 #include <stdbool.h>
+#include <tkey/debug.h>
 #include <tkey/led.h>
-#include <tkey/qemu_debug.h>
 #include <tkey/touch.h>
 
 // CPU clock frequenzy in Hz

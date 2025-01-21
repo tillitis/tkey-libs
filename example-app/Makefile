@@ -2,12 +2,15 @@ P := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 LIBDIR ?= $(P)/../
 OBJCOPY ?= llvm-objcopy
 CC = clang
+
+# If you want debug_puts() etcetera to output something on our QEMU
+# debug port, use -DQEMU_DEBUG below, or -DTKEY_DEBUG to use Tkeys USB debug pipe
 CFLAGS = -g -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 -mcmodel=medany \
    -static -std=gnu99 -O2 -ffast-math -fno-common -fno-builtin-printf \
    -fno-builtin-putchar -nostdlib -mno-relax -flto \
    -Wall -Werror=implicit-function-declaration \
-   -I $(LIBDIR)/include -I $(LIBDIR)  \
-#   -D QEMU_DEBUG
+   -I $(LIBDIR)/include -I $(LIBDIR)
+   # -DQEMU_DEBUG -DTKEY_DEBUG
 
 INCLUDE=$(LIBDIR)/include
 

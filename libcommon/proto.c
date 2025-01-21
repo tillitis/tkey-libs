@@ -3,8 +3,8 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <tkey/debug.h>
 #include <tkey/proto.h>
-#include <tkey/qemu_debug.h>
 #include <tkey/tk1_mem.h>
 
 // clang-format off
@@ -86,10 +86,12 @@ uint8_t readbyte(uint8_t *mode, uint8_t *mode_bytes_left)
 {
 	if (*mode_bytes_left == 0) {
 		*mode = readbyte_();
-		if (*mode != MODE_CDC) {
-			qemu_puts("We only support MODE_CDC\n");
-		} else {
+		if ((*mode == MODE_CDC) || (*mode == MODE_HID) ||
+		    (*mode == MODE_TKEYCTRL)) {
 			*mode_bytes_left = readbyte_();
+		} else {
+			debug_puts("We only support MODE_CDC, MODE_HID and "
+				   "MODE_TKEYCTRL\n");
 		}
 	}
 	uint8_t b = readbyte_();

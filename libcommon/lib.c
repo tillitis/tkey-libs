@@ -89,3 +89,13 @@ void secure_wipe(void *v, size_t n)
 	while (n--)
 		*p++ = 0;
 }
+
+size_t strlen(const char *str)
+{
+	const char *s;
+
+	for (s = str; *s; ++s)
+		;
+
+	return (s - str);
+}

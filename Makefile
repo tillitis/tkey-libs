@@ -4,13 +4,24 @@ CC = clang
 
 INCLUDE=include
 
-# If you want debug_puts() etcetera to output something on our QEMU
-# debug port, use -DQEMU_DEBUG below, or -DTKEY_DEBUG to use Tkeys USB debug pipe
+# Set QEMU_DEBUG and TKEY_DEBUG below when compiling tkey-libs if you
+# want debug prints from tkey-libs functions. By default they are not
+# set, so you don't get any prints from assert(), for instance.
+# 
+# - QEMU_DEBUG: the debug port on our qemu emulator
+#
+# - TKEY_DEBUG: The extra HID endpoint on a real TKey which you can
+#   listen on for debug prints.
+#
+# NOTE WELL: If you just want debug prints on either of them in *your
+# own device app* you just need to include tkey/debug.h and define
+# either of them. You don't need to recompile tkey-libs.
+
 CFLAGS = -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 \
 	-mcmodel=medany -static -std=gnu99 -O2 -ffast-math -fno-common \
 	-fno-builtin-printf -fno-builtin-putchar -nostdlib -mno-relax -flto \
 	-Wall -Werror=implicit-function-declaration \
-	-I $(INCLUDE) -I .
+	-I $(INCLUDE) -I . \
 	# -DQEMU_DEBUG -DTKEY_DEBUG
 
 AS = clang

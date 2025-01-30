@@ -5,6 +5,7 @@
 #include <tkey/led.h>
 #include <tkey/tk1_mem.h>
 #include <tkey/qemu_debug.h>
+#include <tkey/syscall.h>
 
 #define SLEEPTIME 100000
 
@@ -15,17 +16,28 @@ void sleep(uint32_t n)
 
 int main(void)
 {
+	syscall_enable();
+
 	qemu_puts("Hello, world!\n");
 	qemu_puts("Going to sleep between blinks: ");
 	qemu_putinthex(SLEEPTIME);
 	qemu_lf();
 
-	for (;;) {
+	for (int i = 0; i < 2; i++) {
 		led_set(LED_RED);
 		sleep(SLEEPTIME);
 		led_set(LED_GREEN);
 		sleep(SLEEPTIME);
 		led_set(LED_BLUE);
 		sleep(SLEEPTIME);
+	}
+
+	syscall(TKEY_SYSCALL_SET_LED, LED_RED | LED_BLUE);
+
+	sleep(10 * SLEEPTIME);
+
+	syscall(TKEY_SYSCALL_RESET, 0);
+
+	for (;;) {
 	}
 }

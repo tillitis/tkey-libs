@@ -28,9 +28,11 @@ podman:
 	podman run --rm --mount type=bind,source=$(CURDIR),target=/src \
 	-w /src -it $(IMAGE) make -j
 
+CLANG_TIDY = clang-tidy
+
 .PHONY: check
 check:
-	clang-tidy -header-filter=.* -checks=cert-* libcommon/*.c -- $(CFLAGS)
+	$(CLANG_TIDY) -header-filter=.* -checks=cert-* libcommon/*.c -- $(CFLAGS)
 
 # C runtime library
 libcrt0.a: libcrt0/crt0.o

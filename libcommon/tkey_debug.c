@@ -12,55 +12,14 @@
 
 #include <tkey/debug.h>
 
-#define PACKET_SIZE 64
-#define HEADER_SIZE 2
-
-// clang-format off
-static volatile uint32_t *can_tx = (volatile uint32_t *)TK1_MMIO_UART_TX_STATUS;
-static volatile uint32_t *tx =     (volatile uint32_t *)TK1_MMIO_UART_TX_DATA;
-// clang-format on
-
-void tkey_writebyte(uint8_t b)
-{
-	for (;;) {
-		if (*can_tx) {
-			*tx = b;
-			return;
-		}
-	}
-}
-
-void tkey_write(const uint8_t *buf, size_t nbytes)
-{
-	for (int i = 0; i < nbytes; i++) {
-		tkey_writebyte(buf[i]);
-	}
-}
-
-void tkey_write_with_header(const uint8_t *buf, size_t nbytes)
-{
-	tkey_writebyte(MODE_TKEYCTRL);
-	tkey_writebyte(nbytes);
-
-	for (int i = 0; i < nbytes; i++) {
-		tkey_writebyte(buf[i]);
-	}
-}
-
 void tkey_putchar(const uint8_t ch)
 {
-	tkey_writebyte(MODE_TKEYCTRL);
-	tkey_writebyte(1);
-
-	tkey_writebyte(ch);
+	write(&ch, 1, MODE_TKEYCTRL);
 }
 
 void tkey_lf()
 {
-	tkey_writebyte(MODE_TKEYCTRL);
-	tkey_writebyte(1);
-
-	tkey_writebyte('\n');
+	tkey_putchar('\n');
 }
 
 static char hexnibble(const uint8_t ch)
@@ -103,60 +62,72 @@ static char hexnibble(const uint8_t ch)
 	return '0';
 }
 
+uint8_t *hex(const uint8_t ch)
+{
+	static uint8_t buf[2];
+
+	buf[0] = hexnibble(ch >> 4 & 0x0f);
+	buf[1] = hexnibble(ch & 0x0f);
+
+	return buf;
+}
+
 void tkey_puthex(const uint8_t ch)
 {
-	tkey_writebyte(MODE_TKEYCTRL);
-	tkey_writebyte(2);
-
-	tkey_writebyte(hexnibble(ch >> 4 & 0x0f));
-	tkey_writebyte(hexnibble(ch & 0x0f));
+	write(hex(ch), 2, MODE_TKEYCTRL);
 }
 
 void tkey_putinthex(const uint32_t n)
 {
-	uint8_t buf[4];
+	uint8_t buf[10];
+	uint8_t *intbuf = (uint8_t *)&n;
 
-	tkey_writebyte(MODE_TKEYCTRL);
-	tkey_writebyte(2);
+	buf[0] = '0';
+	buf[1] = 'x';
 
-	memcpy(buf, &n, 4);
-	tkey_write((uint8_t *)"0x", 2);
+	int j = 2;
 	for (int i = 3; i > -1; i--) {
-		tkey_puthex(buf[i]);
+		memcpy(&buf[j], hex(intbuf[i]), 2);
+		j += 2;
 	}
+
+	write(buf, 10, MODE_TKEYCTRL);
 }
 
 void tkey_puts(const char *s)
 {
-	size_t remaining = strlen(s);
+	write((const uint8_t *)s, strlen(s), MODE_TKEYCTRL);
+}
 
-	while (remaining > 0) {
-		uint8_t len = (remaining < (PACKET_SIZE - HEADER_SIZE))
-				  ? remaining
-				  : (PACKET_SIZE - HEADER_SIZE);
-
-		// Send chunk data
-		tkey_write_with_header((const uint8_t *)s, len);
-
-		s += len;
-		remaining -= len;
-	}
+static void writehexrow(uint8_t *buf, size_t len)
+{
+	buf[len] = '\n';
+	len++;
+	write(buf, len, MODE_TKEYCTRL);
 }
 
 void tkey_hexdump(const uint8_t *buf, int len)
 {
-	uint8_t *byte_buf = (uint8_t *)buf;
+	uint8_t linebuf[16 * 3 + 1] = {
+	    0};		       // 16 bytes printed 3 chars + final newline
+	uint8_t *hexbuf = {0}; // A byte represented as 2 chars and a space
 
-	for (int i = 0; i < len; i++) {
-		tkey_puthex(byte_buf[i]);
-		if (i % 2 == 1) {
-			tkey_putchar(' ');
-		}
+	int pos = 0;
+	for (int i = 0; i < len;) {
+		hexbuf = hex(buf[i++]);
+		memcpy(&linebuf[pos], hexbuf, 2);
+		pos += 2;
+		linebuf[pos] = ' ';
+		pos++;
 
-		if ((i + 1) % 16 == 0) {
-			tkey_lf();
+		if (i % 16 == 0) {
+			writehexrow(linebuf, pos);
+			pos = 0;
 		}
 	}
 
-	tkey_lf();
+	// Final row wasn't full, so print it anyway.
+	if (pos != 0) {
+		writehexrow(linebuf, pos);
+	}
 }

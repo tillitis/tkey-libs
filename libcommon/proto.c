@@ -25,6 +25,8 @@ static volatile uint32_t* const tx =     (volatile uint32_t *)TK1_MMIO_UART_TX_D
 
 static void writebyte(uint8_t b);
 static uint8_t readbyte(void);
+static void write_with_header(const uint8_t *buf, size_t nbytes, enum mode mode);
+static void qemu_write(const uint8_t *buf, size_t nbytes);
 
 uint8_t genhdr(uint8_t id, uint8_t endpoint, uint8_t status, enum cmdlen len)
 {
@@ -92,11 +94,27 @@ static void write_with_header(const uint8_t *buf, size_t nbytes, enum mode mode)
 	}
 }
 
+static void qemu_write(const uint8_t *buf, size_t nbytes)
+{
+	static volatile uint8_t *const debugtx =
+	    (volatile uint8_t *)TK1_MMIO_QEMU_DEBUG;
+
+	for (int i = 0; i < nbytes; i++) {
+		*debugtx = buf[i];
+	}
+}
+
 // write blockingly writes nbytes bytes of data from buf to the UART,
 // framing the data in USB Mode Protocol with mode mode, either
 // MODE_CDC or MODE_HID.
 void write(const uint8_t *buf, size_t nbytes, enum mode mode)
 {
+	if (mode == MODE_QEMU) {
+		qemu_write(buf, nbytes);
+
+		return;
+	}
+
 	while (nbytes > 0) {
 		// We split the data into chunks that will fit in the
 		// USB Mode Protocol with some spare change.

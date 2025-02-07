@@ -29,7 +29,7 @@ void tkey_lf();
 void tkey_putinthex(const uint32_t n);
 void tkey_puts(const char *s);
 void tkey_puthex(const uint8_t ch);
-void tkey_hexdump(const uint8_t *buf, int len);
+void tkey_hexdump(const void *buf, int len);
 
 #define debug_putchar tkey_putchar
 #define debug_lf tkey_lf

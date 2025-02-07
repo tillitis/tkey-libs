@@ -99,35 +99,34 @@ void tkey_puts(const char *s)
 	write((const uint8_t *)s, strlen(s), MODE_TKEYCTRL);
 }
 
-static void writehexrow(uint8_t *buf, size_t len)
-{
-	buf[len] = '\n';
-	len++;
-	write(buf, len, MODE_TKEYCTRL);
-}
+// Size of a hex line. 16 bytes printed 3 chars + final newline.
+#define LINEBUFSIZE (16 * 3 + 1)
 
-void tkey_hexdump(const uint8_t *buf, int len)
+void tkey_hexdump(const void *buf, int len)
 {
-	uint8_t linebuf[16 * 3 + 1] = {
-	    0};		       // 16 bytes printed 3 chars + final newline
+	uint8_t rowbuf[LINEBUFSIZE] = {0};
 	uint8_t *hexbuf = {0}; // A byte represented as 2 chars and a space
+	uint8_t *byte_buf = (uint8_t *)buf;
 
-	int pos = 0;
-	for (int i = 0; i < len;) {
-		hexbuf = hex(buf[i++]);
-		memcpy(&linebuf[pos], hexbuf, 2);
-		pos += 2;
-		linebuf[pos] = ' ';
-		pos++;
+	int rowpos = 0;
+	for (int i = 0; i < len; i++) {
+		hexbuf = hex(byte_buf[i]);
+		rowbuf[rowpos++] = hexbuf[0];
+		rowbuf[rowpos++] = hexbuf[1];
+		rowbuf[rowpos++] = ' ';
 
-		if (i % 16 == 0) {
-			writehexrow(linebuf, pos);
-			pos = 0;
+		// A finished row is 3 chars * 16. If the row is full,
+		// print it now.
+		if (rowpos == LINEBUFSIZE - 1) {
+			rowbuf[rowpos++] = '\n';
+			write(rowbuf, rowpos, MODE_TKEYCTRL);
+			rowpos = 0;
 		}
 	}
 
-	// Final row wasn't full, so print it anyway.
-	if (pos != 0) {
-		writehexrow(linebuf, pos);
+	// If final row wasn't full, print it now.
+	if (rowpos != 0) {
+		rowbuf[rowpos++] = '\n';
+		write(rowbuf, rowpos, MODE_TKEYCTRL);
 	}
 }

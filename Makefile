@@ -5,9 +5,8 @@ CC = clang
 INCLUDE=include
 
 # Set QEMU_DEBUG and TKEY_DEBUG below when compiling tkey-libs if you
-# want debug prints from tkey-libs functions. By default they are not
-# set, so you don't get any prints from assert(), for instance.
-# 
+# want debug prints from tkey-libs functions.
+#
 # - QEMU_DEBUG: the debug port on our qemu emulator
 #
 # - TKEY_DEBUG: The extra HID endpoint on a real TKey which you can
@@ -21,8 +20,7 @@ CFLAGS = -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 \
 	-mcmodel=medany -static -std=gnu99 -O2 -ffast-math -fno-common \
 	-fno-builtin-printf -fno-builtin-putchar -nostdlib -mno-relax -flto \
 	-Wall -Werror=implicit-function-declaration \
-	-I $(INCLUDE) -I . \
-	# -DQEMU_DEBUG -DTKEY_DEBUG
+	-I $(INCLUDE) -I .
 
 AS = clang
 AR = llvm-ar
@@ -51,8 +49,8 @@ libcrt0.a: libcrt0/crt0.o
 
 # Common C functions
 LIBOBJS=libcommon/assert.o libcommon/blake2s.o libcommon/led.o libcommon/lib.o \
-	libcommon/proto.o libcommon/touch.o libcommon/qemu_debug.o \
-	libcommon/tkey_debug.o
+	libcommon/proto.o libcommon/touch.o libcommon/io.o
+
 libcommon.a: $(LIBOBJS)
 	$(AR) -qc $@ $(LIBOBJS)
 $(LIBOBJS): include/tkey/assert.h include/tkey/blake2s.h  include/tkey/led.h \

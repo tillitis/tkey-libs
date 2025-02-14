@@ -6,37 +6,24 @@
 
 #include <stdint.h>
 
+#include "io.h"
+
 #if defined(QEMU_DEBUG)
-
-void qemu_putchar(const uint8_t ch);
-void qemu_lf();
-void qemu_putinthex(const uint32_t n);
-void qemu_puts(const char *s);
-void qemu_puthex(const uint8_t ch);
-void qemu_hexdump(const uint8_t *buf, int len);
-
-#define debug_putchar qemu_putchar
-#define debug_lf qemu_lf
-#define debug_putinthex qemu_putinthex
-#define debug_puts qemu_puts
-#define debug_puthex qemu_puthex
-#define debug_hexdump qemu_hexdump
+#define debug_putchar(ch) putchar(IO_QEMU, ch)
+#define debug_lf() putchar(IO_QEMU, '\n')
+#define debug_putinthex(ch) putinthex(IO_QEMU, ch)
+#define debug_puts(s) puts(IO_QEMU, s)
+#define debug_puthex(ch) puthex(IO_QEMU, ch)
+#define debug_hexdump(buf, len) hexdump(IO_QEMU, buf, len)
 
 #elif defined(TKEY_DEBUG)
 
-void tkey_putchar(const uint8_t ch);
-void tkey_lf();
-void tkey_putinthex(const uint32_t n);
-void tkey_puts(const char *s);
-void tkey_puthex(const uint8_t ch);
-void tkey_hexdump(const uint8_t *buf, int len);
-
-#define debug_putchar tkey_putchar
-#define debug_lf tkey_lf
-#define debug_putinthex tkey_putinthex
-#define debug_puts tkey_puts
-#define debug_puthex tkey_puthex
-#define debug_hexdump tkey_hexdump
+#define debug_putchar(ch) putchar(IO_TKEYCTRL, ch)
+#define debug_lf() putchar(IO_TKEYCTRL, '\n')
+#define debug_putinthex(ch) putinthex(IO_TKEYCTRL, ch)
+#define debug_puts(s) puts(IO_TKEYCTRL, s)
+#define debug_puthex(ch) puthex(IO_TKEYCTRL, ch)
+#define debug_hexdump(buf, len) hexdump(IO_TKEYCTRL, buf, len)
 
 #else
 

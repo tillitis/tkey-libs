@@ -2,21 +2,21 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 #include <tkey/assert.h>
-#include <tkey/debug.h>
+#include <tkey/io.h>
 #include <tkey/lib.h>
 
-void assert_fail(const char *assertion, const char *file, unsigned int line,
-		 const char *function)
+void assert_fail(enum ioend dest, const char *assertion, const char *file,
+		 unsigned int line, const char *function)
 {
-	debug_puts("assert: ");
-	debug_puts(assertion);
-	debug_puts(" ");
-	debug_puts(file);
-	debug_puts(":");
-	debug_putinthex(line);
-	debug_puts(" ");
-	debug_puts(function);
-	debug_lf();
+	puts(dest, "assert: ");
+	puts(dest, assertion);
+	puts(dest, " ");
+	puts(dest, file);
+	puts(dest, ":");
+	putinthex(dest, line);
+	puts(dest, " ");
+	puts(dest, function);
+	puts(dest, "\n");
 
 	// Force illegal instruction to halt CPU
 	asm volatile("unimp");

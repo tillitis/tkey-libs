@@ -1,5 +1,61 @@
 # Release notes
 
+## Upcoming release
+
+NOTE WELL! Rewritten I/O functions with new semantics!
+
+### I/O
+
+The Castor TKey hardware supports more USB endpoints:
+
+- CDC - the same thing as older versions.
+- HID security token, for FIDO-like apps.
+- CTRL, a HID debug port.
+
+The communication is still over a single UART. To differ between the
+endpoints we use an internal USB Mode Protocol between programs
+running on the PicoRV32 and the CH552 USB Controller.
+
+The I/O functions has changed accordingly. Please use:
+
+- `readselect()` with appropriate bitmask (e.g. `IO_CDC|IO_HID`) to
+  see if there's anything to read in the endpoints you are interested
+  in. Data from endpoints not mentioned in the bitmask will be
+  discarded.
+
+- `read()` is now non-blocking and returns the number of bytes read
+  from the endpoint you specify, because more might not be available
+  yet.
+
+- `write()` now takes an endpoint destination.
+
+- We also introduce generic `putchar()`, `puts()`, `puthex()`,
+  `putinthex()`, and `hexdump()` functions that take a destination
+  argument.
+
+We recommend you use only these functions for I/O on Castor and going
+forward.
+
+For compatibility to develop device apps for the Bellatrix platform
+and earlier, use the low-level, blocking function `uart_read()` for
+reads and *only* the `IO_UART` and `IO_QEMU` destinations for output
+functions like `write()`, `puts()`.
+
+### Debug prints
+
+The optionally built debug prints have changed. You now use
+`debug_puts()` et cetera instead of `qemu_*()`.
+
+You define the debug output endpoint when you compile your program by
+including `debug.h` and defining `QEMU_DEBUG` for the qemu debug port
+or `TKEY_DEBUG` for output on the CTRL HID endpoint. If you don't
+define either, they won't appear in your code.
+
+Similiarly, `assert()` now also follows `QEMU_DEBUG` or `TKEY_DEBUG`,
+and prints something on either before halting the CPU.
+
+Note that on the Bellatrix platform only `QEMU_DEBUG` works.
+
 ## v0.1.2
 
 From now on tkey-libs is licensed under the BSD-2-Clause license,

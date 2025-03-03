@@ -97,18 +97,19 @@ application.
 
 ## Debug output
 
-If you're running the device app on our qemu emulator we have added a
-debug port on 0xfe00\_1000 (`TK1_MMIO_QEMU_DEBUG`). Anything written
-there will be printed as a character by qemu on the console.
+If you want to have debug prints in your program you can use the
+`debug_putchar()`, `debug_puts()`, `debug_putinthex()`,
+`debug_hexdump()` and friends. See `include/tkey/debug.h` for list of
+functions.
 
-`qemu_putchar()`, `qemu_puts()`, `qemu_putinthex()`, `qemu_hexdump()`
-and friends (see `include/tkey/qemu_debug.h` for list of functions)
-use this debug port to print stuff.
+These functions will be turned on if you define either of these when
+compiling your program and linking with `libcommon`:
 
-If you want to use these, define `QEMU_DEBUG` when compiling your
-program, otherwise all `qemu_*()` functions in your program are
-removed by the C pre-processor.
+- `QEMU_DEBUG`: Uses the special debug port only available in qemu to
+  print to the qemu console.
+- `TKEY_DEBUG`: Uses the extra HID device.
 
-`tkey-libs` own use of `qemu_*()` is limited to output from
-`assert()`. This means that `QEMU_DEBUG` should be defined when
-compiling `tkey-libs` itself!
+Note that if you use `TKEY_DEBUG` you *must* have something listening
+on the corresponding HID device. It's usually the last HID device
+created. On Linux, for instance, this means the last reported hidraw
+in `dmesg` is the one you should do `cat /dev/hidrawX` on.

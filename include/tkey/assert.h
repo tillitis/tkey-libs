@@ -4,10 +4,29 @@
 #ifndef TKEY_ASSERT_H
 #define TKEY_ASSERT_H
 
-#define assert(expr)                                                           \
-	((expr) ? (void)(0) : assert_fail(#expr, __FILE__, __LINE__, __func__))
+#include <tkey/io.h>
 
-void assert_fail(const char *assertion, const char *file, unsigned int line,
-		 const char *function);
+#if defined(QEMU_DEBUG)
+#define assert(expr)                                                           \
+	((expr) ? (void)(0)                                                    \
+		: assert_fail(IO_QEMU, #expr, __FILE__, __LINE__, __func__))
+
+#elif defined(TKEY_DEBUG)
+
+#define assert(expr)                                                           \
+	((expr)                                                                \
+	     ? (void)(0)                                                       \
+	     : assert_fail(IO_TKEYCTRL, #expr, __FILE__, __LINE__, __func__))
+
+#else
+
+#define assert(expr)                                                           \
+	((expr) ? (void)(0)                                                    \
+		: assert_fail(IO_NONE, #expr, __FILE__, __LINE__, __func__))
+
+#endif
+
+void assert_fail(enum ioend dest, const char *assertion, const char *file,
+		 unsigned int line, const char *function);
 
 #endif

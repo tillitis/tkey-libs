@@ -15,7 +15,7 @@
 #define LED_WHITE (LED_RED | LED_GREEN | LED_BLUE)
 // clang-format on
 
-uint32_t led_get();
+uint32_t led_get(void);
 void led_set(uint32_t ledvalue);
 void led_flash_forever(uint32_t ledvalue);
 #endif

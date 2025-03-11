@@ -24,3 +24,12 @@ void assert_fail(enum ioend dest, const char *assertion, const char *file,
 	// Not reached
 	__builtin_unreachable();
 }
+
+void assert_halt(void)
+{
+	// Force illegal instruction to halt CPU
+	asm volatile("unimp");
+
+	// Not reached
+	__builtin_unreachable();
+}

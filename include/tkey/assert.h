@@ -20,13 +20,10 @@
 
 #else
 
-#define assert(expr)                                                           \
-	((expr) ? (void)(0)                                                    \
-		: assert_fail(IO_NONE, #expr, __FILE__, __LINE__, __func__))
-
+#define assert(expr) ((expr) ? (void)(0) : assert_halt())
 #endif
 
 void assert_fail(enum ioend dest, const char *assertion, const char *file,
 		 unsigned int line, const char *function);
-
+void assert_halt(void);
 #endif

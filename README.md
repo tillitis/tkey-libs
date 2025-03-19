@@ -4,13 +4,15 @@
 
 - C runtime: libcrt0.
 - Common C functions including protocol calls: libcommon.
-- Cryptographic functions: libmonocypher.
-  Based on monocypher version 4.0.2
-  https://github.com/LoupVaillant/Monocypher
+- Cryptographic functions: libmonocypher. Based on
+  [Monocypher](https://github.com/LoupVaillant/Monocypher) version
+  4.0.2
+- BLAKE2s hash function: libblake2s.
 
 Release notes in [RELEASE.md](RELEASE.md).
 
-## Licenses and SPDX tags
+## Licenses
+
 Unless otherwise noted, the project sources are copyright Tillitis AB,
 licensed under the terms and conditions of the "BSD-2-Clause" license.
 See [LICENSE](LICENSE) for the full license text.
@@ -21,6 +23,21 @@ External source code we have imported are isolated in their own
 directories. They may be released under other licenses. This is noted
 with a similar `LICENSE` file in every directory containing imported
 sources.
+
+Imported sources:
+
+- [Monocypher](https://github.com/LoupVaillant/Monocypher) (BSD-2) by
+  Loup Vaillant.
+
+- blake2s (CC-0), originally based on the reference implementation in
+  [RFC 7693](https://www.rfc-editor.org/rfc/rfc7693.html) written by
+  Markku-Juhani O. Saarinen ([original
+  repository](https://github.com/mjosaarinen/blake2_mjosref). Imported
+  from [Joachim Strömbergson's
+  fork](https://github.com/secworks/blake2s/) used as a model for a
+  hardware implementation.
+
+### SPDX tags
 
 The project uses single-line references to Unique License Identifiers
 as defined by the Linux Foundation's [SPDX project](https://spdx.org/)

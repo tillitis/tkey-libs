@@ -57,13 +57,18 @@ specification](https://reuse.software/).
 
 ### Bellatrix and earlier
 
-Please note that you need to use `uart_write()` and `uart_read()` for
-I/O.
+Please note that:
 
-If you want debug prints in QEMU you can still use `write(IO_QEMU,
-...)`. Avoid using `write()` in other cases.
+- For reading, only use the blocking `uart_read()`.
+
+- Only `IO_UART` and `IO_QEMU` destinations are useful for writing as
+  in `write(IO_UART, ...)`, `puts(IO_UART, ...)`, and so on.
+
+- Defining `QEMU_DEBUG` works with all the `debug_*` functions, but
+  `TKEY_DEBUG` does not.
 
 ## Building
+
 In order to build, you must have the `make`, `clang`, `llvm`, and
 `lld` packages installed.
 

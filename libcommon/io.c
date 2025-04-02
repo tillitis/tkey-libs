@@ -348,3 +348,27 @@ void hexdump(enum ioend dest, void *buf, int len)
 		write(dest, rowbuf, rowpos);
 	}
 }
+
+// Configure USB endpoints that should be enabled/disabled
+//
+// Allowed options are:
+//   - IO_FIDO
+//   - IO_DEBUG
+//
+// The following are always enabled:
+//   - IO_CDC
+//   - IO_CH552
+//
+// Use like this:
+//
+//   config_endpoints(IO_FIDO|IO_DEBUG)
+//
+void config_endpoints(enum ioend endpoints)
+{
+	uint8_t cmdbuf[2] = {0};
+
+	cmdbuf[0] = SET_ENDPOINTS;
+	cmdbuf[1] = endpoints;
+
+	write(IO_CH552, cmdbuf, 2);
+}

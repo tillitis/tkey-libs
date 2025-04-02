@@ -22,6 +22,10 @@ enum ioend {
 	IO_FIDO = 0x80,	 // FIDO security token port
 };
 
+enum ch552cmd {
+	SET_ENDPOINTS = 0x01, // Config USB endpoints on the CH552
+};
+
 void write(enum ioend dest, const uint8_t *buf, size_t nbytes);
 int read(enum ioend src, uint8_t *buf, size_t bufsize, size_t nbytes);
 int uart_read(uint8_t *buf, size_t bufsize, size_t nbytes);
@@ -31,4 +35,6 @@ void puthex(enum ioend dest, const uint8_t ch);
 void putinthex(enum ioend dest, const uint32_t n);
 void puts(enum ioend dest, const char *s);
 void hexdump(enum ioend dest, void *buf, int len);
+void config_endpoints(enum ioend endpoints);
+
 #endif

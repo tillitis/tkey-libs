@@ -2,7 +2,29 @@
 
 ## Upcoming release
 
-NOTE WELL! Rewritten I/O functions with new semantics!
+- NOTE WELL! Rewritten I/O functions with new signatures and
+  semantics!
+- `blake2s()` with new signature.
+
+### BLAKE2s hash function
+
+The `blake2s()` function no longer call the firmware.
+
+- The `blake2s.h` header file has moved to `blake2s/blake2s.h`.
+
+- The `blake2s()` hash function has changed signature. It's now defined
+  as:
+
+  ```
+  // All-in-one convenience function.
+  int blake2s(void *out, size_t outlen,   // return buffer for digest
+      const void *key, size_t keylen,     // optional secret key
+      const void *in, size_t inlen);      // data to be hashed
+
+  ```
+
+- The component functions `blake2s_init()`, `blake2s_update()`, and
+  `blake2s_final()` are now available.
 
 ### I/O
 

@@ -74,15 +74,20 @@ static void write_with_header(enum ioend dest, const uint8_t *buf,
 // write blockingly writes nbytes bytes of data from buf to dest which
 // is either:
 //
+// - IO_UART: Low-level UART access, no USB Mode Header added.
+//
 // - IO_QEMU: QEMU debug port
 //
-// - IO_UART: Low-level UART access, no USB Mode Header added.
+// - IO_CH552: Internal communication between the FPGA and the
+//   CH552, with header.
 //
 // - IO_CDC: Through the UART for the CDC endpoint, with header.
 //
 // - IO_FIDO: Through the UART for the FIDO endpoint, with header.
 //
-// - IO_DEBUG: Through the UART for the DEBUG HID endpoint, with
+// - IO_CCID: Through the UART for the CCID endpoint, with header.
+//
+// - IO_DEBUG: Through the UART for the DEBUG endpoint (USB HID), with
 //   header.
 void write(enum ioend dest, const uint8_t *buf, size_t nbytes)
 {
@@ -203,9 +208,11 @@ static int discard(size_t nbytes)
 //
 // Only endpoints available for read are:
 //
-// - IO_DEBUG
+// - IO_CH552
 // - IO_CDC
 // - IO_FIDO
+// - IO_CCID
+// - IO_DEBUG
 //
 // If you need blocking low-level UART reads, use uart_read() instead.
 //
@@ -352,7 +359,8 @@ void hexdump(enum ioend dest, void *buf, int len)
 // Configure USB endpoints that should be enabled/disabled
 //
 // Allowed options are:
-//   - IO_FIDO
+//   - IO_FIDO (can't be used used together with IO_CCID)
+//   - IO_CCID (can't be used used together with IO_FIDO)
 //   - IO_DEBUG
 //
 // The following are always enabled:

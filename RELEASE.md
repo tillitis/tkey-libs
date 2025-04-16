@@ -32,6 +32,7 @@ The Castor TKey hardware supports more USB endpoints:
 
 - CDC - the same thing as older versions.
 - FIDO security token, for FIDO-like apps.
+- CCID, smart card interface.
 - DEBUG, a HID debug port.
 
 The communication is still over a single UART. To differ between the

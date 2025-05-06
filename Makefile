@@ -48,7 +48,7 @@ libcrt0.a: libcrt0/crt0.o
 	$(AR) -qc $@ libcrt0/crt0.o
 
 # System calls
-SYSCALLOBJS=libsyscall/syscall.o
+SYSCALLOBJS=libsyscall/syscall.o libsyscall/sys_wrapper.o
 
 libsyscall.a: $(SYSCALLOBJS)
 	$(AR) -qc $@ $(SYSCALLOBJS)
@@ -93,7 +93,7 @@ compile_commands.json:
 	bear -- make all
 
 # Uses ../.clang-format
-FMTFILES=include/tkey/*.h libcommon/*.c
+FMTFILES=include/tkey/*.h libsyscall/*.c libcommon/*.c
 .PHONY: fmt
 fmt:
 	clang-format --dry-run --ferror-limit=0 $(FMTFILES)

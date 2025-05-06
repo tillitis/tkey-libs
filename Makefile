@@ -31,7 +31,7 @@ LDFLAGS=-T app.lds -L libcommon/ -lcommon -L libcrt0/ -lcrt0
 
 
 .PHONY: all
-all: libcrt0.a libcommon.a libmonocypher.a libblake2s.a
+all: libcrt0.a libcommon.a libsyscall.a libmonocypher.a libblake2s.a
 
 IMAGE=ghcr.io/tillitis/tkey-builder:4
 
@@ -46,6 +46,14 @@ check:
 # C runtime library
 libcrt0.a: libcrt0/crt0.o
 	$(AR) -qc $@ libcrt0/crt0.o
+
+# System calls
+SYSCALLOBJS=libsyscall/syscall.o
+
+libsyscall.a: $(SYSCALLOBJS)
+	$(AR) -qc $@ $(SYSCALLOBJS)
+
+$(SYSCALLOBJS): include/tkey/syscall.h
 
 # Common C functions
 LIBOBJS=libcommon/assert.o libcommon/led.o libcommon/lib.o \
@@ -69,7 +77,7 @@ libblake2s.a: $(B2OBJS)
 	$(AR) -qc $@ $(B2OBJS)
 $B2OBJS: blake2s/blake2s.h
 
-LIBS=libcrt0.a libcommon.a
+LIBS=libcrt0.a libcommon.a libsyscall.a
 
 .PHONY: clean
 clean:

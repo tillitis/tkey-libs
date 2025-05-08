@@ -79,11 +79,11 @@ int sys_preload_delete(void)
 	return syscall(TK1_SYSCALL_PRELOAD_DELETE, 0, 0, 0);
 }
 
-// Store an app, or possible just a block of an app, from the `app`
+// Store an app, or possibly just a block of an app, from the `app`
 // buffer in flash slot 1 at byte `offset`.
 //
 // If you can't fit your entire app in the buffer, call
-// `PRELOAD_STORE` many times as you receive the binary from the
+// `sys_preload_store` many times as you receive the binary from the
 // client. Returns 0 on success.
 //
 // At most 4096 bytes can be written at once and `offset` must be a

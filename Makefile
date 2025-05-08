@@ -84,6 +84,7 @@ clean:
 	rm -f $(LIBS) $(LIBOBJS) libcrt0/crt0.o
 	rm -f libmonocypher.a $(MONOOBJS)
 	rm -f libblake2s.a $(B2OBJS)
+	rm -f libsyscall.a $(SYSCALLOBJS)
 
 # Create compile_commands.json for clangd and LSP
 .PHONY: clangd

@@ -14,10 +14,12 @@ void sys_reset(struct reset *rst, size_t len)
 	syscall(TK1_SYSCALL_RESET, (uint32_t)rst, len, 0);
 }
 
-// Allocate a flash area for the current app. Must be done before
-// sys_write() or sys_read().
+// Allocate a flash area for the current app. Must be done before sys_write()
+// or sys_read(). If the current app already has an area allocated no new
+// area will be allocated.
 //
-// Returns 0 on success.
+// Returns 0 if a new area has been allocated.
+// Returns 1 if current app already has an area allocated
 int sys_alloc(void)
 {
 	return syscall(TK1_SYSCALL_ALLOC_AREA, 0, 0, 0);

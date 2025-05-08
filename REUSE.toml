@@ -18,7 +18,6 @@ path = [
      "README-DIST.txt",
      "README.md",
      "RELEASE.md",
-     "libsyscall/picorv32/README.md",     
 ]
 SPDX-FileCopyrightText = "2022 Tillitis AB <tillitis.se>"
 SPDX-License-Identifier = "BSD-2-Clause"
@@ -38,11 +37,3 @@ path = [
 
 SPDX-FileCopyrightText = "2014 Secworks Sweden AB"
 SPDX-License-Identifier = "BSD-2-Clause"
-
-[[annotations]]
-path = [
-     "libsyscall/picorv32/custom_ops.S",
-]
-
-SPDX-FileCopyrightText = "Yosys HQ"
-SPDX-License-Identifier = "CC0-1.0"

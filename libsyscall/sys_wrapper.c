@@ -11,7 +11,7 @@
 // Doesn't return. The TKey is reset and firmware starts again.
 void sys_reset(struct reset *rst, size_t len)
 {
-	syscall(TK1_SYSCALL_RESET, (uint32_t)rst, 0, 0);
+	syscall(TK1_SYSCALL_RESET, (uint32_t)rst, len, 0);
 }
 
 // Allocate a flash area for the current app. Must be done before

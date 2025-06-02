@@ -33,7 +33,7 @@ LDFLAGS=-T app.lds -L libcommon/ -lcommon -L libcrt0/ -lcrt0
 .PHONY: all
 all: libcrt0.a libcommon.a libsyscall.a libmonocypher.a libblake2s.a
 
-IMAGE=ghcr.io/tillitis/tkey-builder:4
+IMAGE=ghcr.io/tillitis/tkey-builder:5rc1
 
 podman:
 	podman run --rm --mount type=bind,source=$(CURDIR),target=/src \

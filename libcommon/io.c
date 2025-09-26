@@ -322,11 +322,11 @@ void puts(enum ioend dest, const char *s)
 #define FULLROW (16 * 3)
 #define ROWBUFSIZE (FULLROW + 2)
 
-void hexdump(enum ioend dest, void *buf, int len)
+void hexdump(enum ioend dest, const void *buf, int len)
 {
 	uint8_t rowbuf[ROWBUFSIZE] = {0};
 	uint8_t hexbuf[2] = {0};
-	uint8_t *byte_buf = (uint8_t *)buf;
+	const uint8_t *byte_buf = (const uint8_t *)buf;
 
 	int rowpos = 0;
 	for (int i = 0; i < len; i++) {

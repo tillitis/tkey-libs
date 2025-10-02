@@ -153,7 +153,7 @@ int read(enum ioend src, uint8_t *buf, size_t bufsize, size_t nbytes)
 
 	int n = 0;
 
-	for (n = 0; n < nbytes; n++) {
+	for (n = 0; n < nbytes && cur_endpoint.len > 0; n++) {
 		buf[n] = readbyte();
 		cur_endpoint.len--;
 	}

@@ -6,6 +6,9 @@
 OUTPUT_ARCH( "riscv" )
 ENTRY(_start)
 
+/* Define stack size */
+STACK_SIZE = 16K;
+
 MEMORY
 {
 	RAM (rwx)   : ORIGIN = 0x40000000, LENGTH = 0x20000 /* 128 KB */
@@ -18,9 +21,20 @@ SECTIONS
 		*(.text.init)
 	} >RAM
 
+	.stack (NOLOAD) :
+	{
+		. = ALIGN(16);
+		_sstack = .;
+		. += STACK_SIZE;
+		. = ALIGN(16);
+		_estack = .;
+		_sidata = _estack;
+	} >RAM
+
 	.text :
 	{
 		. = ALIGN(4);
+		_stext = .;
 		*(.text)           /* .text sections (code) */
 		*(.text*)          /* .text* sections (code) */
 		*(.rodata)         /* .rodata sections (constants, strings, etc.) */
@@ -60,5 +74,4 @@ SECTIONS
 		_ebss = .;
 	} >RAM
 
-	/* libcrt0/crt0.S inits stack to start just below end of RAM */
 }

@@ -143,6 +143,7 @@ unsigned long __umoddi3 (unsigned long a, unsigned long b)
 	return __umodsi3 (a, b);
 }
 #else /* SELF_TEST */
+/* Run, e.g., using gcc -Wall -O -DSELF_TEST=1 udiv.c && ./a.out */
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -154,6 +155,40 @@ static void die (const char *format, ...) {
   fprintf (stderr, "\n");
   abort ();
 }
+
+/* Exhaustive test of the preinv function. */
+static void test_preinv (void) {
+	for (unsigned d = 1; d; d++) {
+		struct inverse inv;
+		preinv (d, &inv);
+		if (inv.shift >= 32)
+			die ("out-of-range shift %d for d = %x", inv.shift, d);
+		if ((d >> inv.shift) != 1)
+			die ("bad shift %d for d = %x", inv.shift, d);
+
+		if (!(d & (d-1))) {
+			/* A power of two */
+			if (inv.v)
+				die ("bad inverse v = %x for d = %x (power of two)", inv.v, d);
+			continue;
+		}
+		uint64_t p = (uint64_t) d * inv.v;
+		uint64_t k = p + ((uint64_t) d << 32);
+		if (inv.shift == 31) {
+			/* Normalized, must overflow */
+			if (k >= p)
+				die ("too small inverse v = %x for d = %x (normalized)", inv.v, d);
+		} else {
+			uint64_t power_of_2 = (uint64_t) 1 << (33 + inv.shift);
+			if (k < power_of_2)
+				die ("too small inverse v = %x for d = %x (unnormalized)", inv.v, d);
+			k -= power_of_2;
+		}
+		if (k >= (uint64_t) d)
+			die ("too large inverse v = %x for d = %x", inv.v, d);
+	}
+}
+
 static unsigned test_one (unsigned u, unsigned d) {
 	unsigned q = __udivsi3 (u, d);
 	uint64_t p = (uint64_t) q * d;
@@ -196,7 +231,26 @@ static void test_range (unsigned d, unsigned max_q) {
 	}
 }
 
+static unsigned rand_uint32(void) {
+	/* Call lrand48 twice, since each call produces only 31 bits. */
+	unsigned lo = lrand48();
+	unsigned hi = lrand48();
+	return lo | (hi << 31);
+}
+
+static void test_random (unsigned count) {
+	for (unsigned i = 0; i < count; i++) {
+		unsigned u = rand_uint32();
+		unsigned d = rand_uint32();
+		d += (d == 0);
+		test_one (u, d);
+	}
+}
+
 int main (void) {
+	/* Expected to take up to 20s. */
+	test_preinv();
+
 	unsigned d[] = {
 		1, 2, 3, 10, 32, 37, 0xcafe, 0xdeafbeaf, 0xfffffffe, 0xffffffff
 	};
@@ -205,5 +259,7 @@ int main (void) {
 
 		test_range (d[i], max_q);
 	}
+	/* Expected to take a few seconds. */
+	test_random(100000000);
 }
 #endif /* SELF_TEST */

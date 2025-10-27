@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025 Glasklar Teknik AB <glasklarteknik.se>
+// SPDX-License-Identifier: BSD-2-Clause
 #include <stdint.h>
 #ifdef SELF_TEST
 #include <assert.h>

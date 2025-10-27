@@ -36,7 +36,7 @@ void putchar(enum ioend dest, const uint8_t ch);
 void puthex(enum ioend dest, const uint8_t ch);
 void putinthex(enum ioend dest, const uint32_t n);
 void puts(enum ioend dest, const char *s);
-void hexdump(enum ioend dest, void *buf, int len);
+void hexdump(enum ioend dest, const void *buf, int len);
 void config_endpoints(uint8_t endpoints);
 
 #endif

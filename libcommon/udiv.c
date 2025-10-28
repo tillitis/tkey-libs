@@ -105,6 +105,8 @@ static void preinv(unsigned d, struct inverse *inv)
 }
 
 /* floor (a / b) */
+// Tell clang-tidy not to care about redefinining reserved identifier
+// NOLINTNEXTLINE(cert-dcl37-c, cert-dcl51-cpp)
 unsigned int __udivsi3(unsigned int u, unsigned int d)
 {
 	struct inverse inv;
@@ -119,6 +121,8 @@ unsigned int __udivsi3(unsigned int u, unsigned int d)
 	return q >> inv.shift;
 }
 
+// Tell clang-tidy not to care about redefinining reserved identifier
+// NOLINTNEXTLINE(cert-dcl37-c, cert-dcl51-cpp)
 unsigned int __umodsi3(unsigned int u, unsigned int d)
 {
 	unsigned q = __udivsi3(u, d);
@@ -128,11 +132,15 @@ unsigned int __umodsi3(unsigned int u, unsigned int d)
 #ifndef SELF_TEST
 _Static_assert(sizeof(unsigned long) == 4, "unsupported long size");
 
+// Tell clang-tidy not to care about redefinining reserved identifier
+// NOLINTNEXTLINE(cert-dcl37-c, cert-dcl51-cpp)
 unsigned long __udivdi3(unsigned long a, unsigned long b)
 {
 	return __udivsi3(a, b);
 }
 
+// Tell clang-tidy not to care about redefinining reserved identifier
+// NOLINTNEXTLINE(cert-dcl37-c, cert-dcl51-cpp)
 unsigned long __umoddi3(unsigned long a, unsigned long b)
 {
 	return __umodsi3(a, b);

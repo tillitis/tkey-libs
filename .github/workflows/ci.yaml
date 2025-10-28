@@ -29,6 +29,9 @@ jobs:
       - name: make
         run: make
 
+      - name: test
+        run: make test
+
       - name: build test app
         working-directory: example-app
         run: make

@@ -41,6 +41,13 @@ podman:
 
 CLANG_TIDY = clang-tidy
 
+.PHONY: test
+test: udiv
+	./udiv
+
+udiv: libcommon/udiv.c
+	$(CC) -Wall -O -DSELF_TEST=1 libcommon/udiv.c -o udiv
+
 .PHONY: check
 check:
 	$(CLANG_TIDY) -header-filter=.* -checks=cert-* libcommon/*.c -- $(CFLAGS)
@@ -87,6 +94,7 @@ clean:
 	rm -f libmonocypher.a $(MONOOBJS)
 	rm -f libblake2s.a $(B2OBJS)
 	rm -f libsyscall.a $(SYSCALLOBJS)
+	rm -f udiv
 
 # Create compile_commands.json for clangd and LSP
 .PHONY: clangd

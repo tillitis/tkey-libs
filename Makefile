@@ -48,9 +48,11 @@ test: udiv
 udiv: libcommon/udiv.c
 	$(CC) -Wall -O -DSELF_TEST=1 libcommon/udiv.c -o udiv
 
+# TODO add dep on compile_commands.json when tkey-builder has bear
+# Not checking blake2s_test.c which uses stdio.h we don't have.
 .PHONY: check
 check:
-	$(CLANG_TIDY) -header-filter=.* -checks=cert-* libcommon/*.c -- $(CFLAGS)
+	$(CLANG_TIDY) -header-filter=.* -checks=clang-analyzer-*,cert-* blake2s/blake2s.c libcommon/*.c libsyscall/*.c monocypher/*.c -- $(CFLAGS)
 
 # C runtime library
 libcrt0.a: libcrt0/crt0.o

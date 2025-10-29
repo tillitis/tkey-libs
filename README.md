@@ -118,9 +118,21 @@ clang -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 \
 clang -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 \
   -mcmodel=medany -static -ffast-math -fno-common -nostdlib \
   -T ../tkey-libs/app.lds \
+  -Wl,--gc-sections,--print-gc-sections \
   -L ../tkey-libs -lcrt0 \
   -I ../tkey-libs -o foo.elf foo.o
+```
 
+Note the `--gc-sections` which you need to remove unused sections. For
+instance, the recently added support for division means that you
+otherwise would get a kilobyte-large table included in your device app
+even if you don't use division.
+
+Since the TKey doesn't accept ELF binaries, you now have to strip the
+ELF header to produce a raw binary:
+
+```
+llvm-objcopy --input-target=elf32-littleriscv --output-target=binary foo.elf foo.bin
 ```
 
 ## Makefile example

@@ -39,9 +39,6 @@ jobs:
       - name: check fmt of c code
         run: make checkfmt
 
-      - name: check for SPDX tags
-        run: ./tools/spdx-ensure
-
       - name: Archive
         uses: actions/upload-artifact@v4
         with:

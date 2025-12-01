@@ -8,7 +8,7 @@
 #define TKEY_SYSCALL_H
 
 #define RESET_DIGEST_SIZE 32
-#define RESET_DATA_SIZE 220
+#define RESET_DATA_SIZE 184
 
 // Needs to be held synchronized with syscall_num.h in firmware.
 enum reset_start {
@@ -21,9 +21,14 @@ enum reset_start {
 	START_CLIENT_VER = 6,
 };
 
+#define RESET_NEXT 0x01
+#define RESET_SEED 0x02
+
 struct reset {
 	enum reset_start type;
+	uint8_t mask;
 	uint8_t app_digest[RESET_DIGEST_SIZE];
+	uint8_t measured_id_seed[RESET_DIGEST_SIZE];
 	uint8_t next_app_data[RESET_DATA_SIZE];
 };
 

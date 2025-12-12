@@ -125,15 +125,16 @@ int sys_preload_store_fin(size_t len, uint8_t digest[32], uint8_t signature[64])
 		       (uint32_t)signature);
 }
 
-// Copies the digest and signature of app in flash slot 1 to
-// `app_digest` and `app_signature`. Returns 0 on success. Only
+// Copies the digest, signature and pubkey for app in flash slot 1 to
+// `app_digest`, `app_signature` and `pubkey`. Returns 0 on success. Only
 // available for the verified management app.
 //
 // Returns 0 on success.
-int sys_get_digsig(uint8_t digest[32], uint8_t signature[64])
+int sys_get_digsig(uint8_t digest[32], uint8_t signature[64],
+		   uint8_t pubkey[32])
 {
 	return syscall(TK1_SYSCALL_PRELOAD_GET_DIGSIG, (uint32_t)digest,
-		       (uint32_t)signature, 0);
+		       (uint32_t)signature, (uint32_t)pubkey);
 }
 
 // Returns filesystem status. Non-zero when problems have been

@@ -8,7 +8,7 @@
 #define TKEY_SYSCALL_H
 
 #define RESET_DIGEST_SIZE 32
-#define RESET_DATA_SIZE 220
+#define RESET_DATA_SIZE 184
 
 // Needs to be held synchronized with syscall_num.h in firmware.
 enum reset_start {
@@ -21,9 +21,14 @@ enum reset_start {
 	START_CLIENT_VER = 6,
 };
 
+#define RESET_NEXT 0x01
+#define RESET_SEED 0x02
+
 struct reset {
 	enum reset_start type;
+	uint8_t mask;
 	uint8_t app_digest[RESET_DIGEST_SIZE];
+	uint8_t seed_digest[RESET_DIGEST_SIZE];
 	uint8_t next_app_data[RESET_DATA_SIZE];
 };
 
@@ -58,6 +63,7 @@ int sys_preload_delete(void);
 int sys_preload_store(uint32_t offset, void *app, size_t len);
 int sys_preload_store_fin(size_t len, uint8_t digest[32],
 			  uint8_t signature[64]);
-int sys_get_digsig(uint8_t digest[32], uint8_t signature[64]);
+int sys_get_digsig(uint8_t digest[32], uint8_t signature[64],
+		   uint8_t pubkey[32]);
 int sys_status(void);
 #endif

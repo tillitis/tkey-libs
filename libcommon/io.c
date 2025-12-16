@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 #include <string.h>
 #include <tkey/assert.h>
@@ -22,7 +23,6 @@
 #define USBMODE_PACKET_SIZE 64
 
 static void hex(uint8_t buf[2], const uint8_t c);
-static int discard(size_t nbytes);
 static uint8_t readbyte(void);
 static void writebyte(uint8_t b);
 
@@ -172,12 +172,107 @@ int read(enum ioend src, uint8_t *buf, size_t bufsize, size_t nbytes)
 	return n;
 }
 
+// read_serial blocks and returns when nbytes is read from the cdc endpoint.
+// Returns number of bytes read on success, negative on error.
+//
+// serial_read does not handle interleaved frames from different endpoints, and
+// hence should only be used with IO_CDC set via config_endpoints() (default).
+//
+// Use write(IO_CDC,..) for accompanying writes to the CDC endpoint.
+//
+// The allocated size of buf, bufsize, needs to be equal or greater than
+// nbytes. Otherwise no data will be read and an error will be returned.
+int read_serial(uint8_t *buf, size_t bufsize, size_t nbytes)
+{
+	uint8_t available = 0;
+	enum ioend endpoint = IO_NONE;
+	size_t n = 0;
+	size_t remaining = nbytes;
+	uint8_t read_length;
+
+	while (remaining > 0) {
+		if (readselect(IO_CDC, false, &endpoint, &available) < 0) {
+			return -1;
+		}
+		// readselect should not return anything else than IO_CDC
+		if (endpoint != IO_CDC) {
+			return -2;
+		}
+
+		// Read as much as is available of what we expect from
+		// the frame.
+		read_length = available;
+
+		if (remaining < read_length) {
+			read_length = remaining;
+		}
+
+		int rd = read(IO_CDC, &buf[n], bufsize - n, read_length);
+		if (rd < 0) {
+			return -1;
+		}
+		n += rd;
+		remaining -= rd;
+	}
+	return n;
+}
+
+// Discards nbytes data from IO_CDC endpoint
+int discard_serial(size_t nbytes)
+{
+	uint8_t available = 0;
+	enum ioend endpoint = IO_NONE;
+	size_t remaining = nbytes;
+	uint8_t discard_len;
+
+	while (remaining > 0) {
+		if (readselect(IO_CDC, false, &endpoint, &available) < 0) {
+			return -1;
+		}
+		// readselect should not return anything else than IO_CDC
+		if (endpoint != IO_CDC) {
+			return -2;
+		}
+
+		discard_len = available;
+
+		if (remaining < discard_len) {
+			discard_len = remaining;
+		}
+
+		int rd = discard(IO_CDC, discard_len);
+		remaining -= rd;
+	}
+	return 0;
+}
+
 // discard nbytes of what's available.
 //
-// Returns how many bytes were discarded.
-static int discard(size_t nbytes)
+// Use IO_UART to discard bytes in the UART fifo-buffer
+//
+// Use IO_CDC, IO_FIDO, IO_CCID or IO_DEBUG to discard for respective endpoint.
+//
+// Returns how many bytes were discarded, negative on error.
+int discard(enum ioend src, size_t nbytes)
 {
 	int n = 0;
+
+	if (src == IO_NONE || src == IO_QEMU) {
+		// Destination only endpoints
+		return -1;
+	}
+
+	if (src == IO_UART) {
+		for (n = 0; n < nbytes; n++) {
+			(void)readbyte();
+		}
+	}
+
+	if (src != cur_endpoint.endpoint) {
+		// Nothing to discard for this endpoint
+		return 0;
+	}
+
 	uint8_t len = nbytes < cur_endpoint.len ? nbytes : cur_endpoint.len;
 
 	for (n = 0; n < len; n++) {
@@ -259,7 +354,7 @@ int readselect(int bitmask, bool non_blocking, enum ioend *endpoint,
 
 		// Not the USB endpoint caller asked for. Discard the
 		// rest from this endpoint.
-		if (discard(*len) != *len) {
+		if (discard(cur_endpoint.endpoint, *len) != *len) {
 			// We couldn't discard what the USB Mode
 			// Protocol itself reported was available!
 			// Something's fishy. Halt.

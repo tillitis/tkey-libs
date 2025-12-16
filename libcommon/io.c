@@ -179,6 +179,35 @@ int uart_read(uint8_t *buf, size_t bufsize, size_t nbytes)
 	return 0;
 }
 
+// read_serial blocks an returns when nbytes is read from the cdc endpoint.
+//
+// read_serial does not handle interleaved frames from different endpoints, and
+// hence should only be used with IO_CDC set via config_endpoints() (default).
+//
+// returns zero on success.
+int read_serial(uint8_t *buf, size_t bufsize, size_t nbytes)
+{
+	uint8_t available = 0;
+	enum ioend endpoint = IO_NONE;
+
+	for (size_t n = 0; n < nbytes;) {
+		if (readselect(IO_CDC, false, &endpoint, &available) < 0) {
+			return -1;
+		}
+
+		// Read as much as is available of what we expect from
+		// the frame.
+		available = available > nbytes ? nbytes : available;
+
+		int rd = read(IO_CDC, &buf[n], bufsize - n, available);
+		if (rd < 0) {
+			return -1;
+		}
+		n += rd;
+	}
+	return 0;
+}
+
 // discard nbytes of what's available.
 //
 // Returns how many bytes were discarded.

@@ -68,6 +68,11 @@ binary size. This API only works with either `IO_CDC` or `IO_UART`
 depending on version. They cannot safely be used if additionl
 endpoints is enabled via `config_endpoints()`.
 
+### Frame handling
+When using the defined framing protocol the helper functions
+`frame_read()` and `frame_write()` can be used. They can be used with
+both Bellatrix and Castor and will aid in the frame parsing.
+
 ### Debug prints
 
 The optionally built debug prints have changed. You now use
@@ -78,7 +83,7 @@ including `debug.h` and defining `QEMU_DEBUG` for the qemu debug port
 or `TKEY_DEBUG` for output on the DEBUG HID endpoint. If you don't
 define either, they won't appear in your code.
 
-Similiarly, `assert()` now also follows `QEMU_DEBUG` or `TKEY_DEBUG`,
+Similarly, `assert()` now also follows `QEMU_DEBUG` or `TKEY_DEBUG`,
 and prints something on either before halting the CPU.
 
 Note that on the Bellatrix platform only `QEMU_DEBUG` works.

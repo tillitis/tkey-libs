@@ -34,6 +34,10 @@ struct frame_header {
 	size_t len;
 };
 
-uint8_t genhdr(uint8_t id, uint8_t endpoint, uint8_t status, enum cmdlen len);
+int genhdr(uint8_t id, uint8_t endpoint, uint8_t status, size_t nbytes,
+	   uint8_t *header);
 int parseframe(uint8_t b, struct frame_header *hdr);
+int read_frame(uint8_t *buf, size_t bufsize, struct frame_header *hdr);
+int write_frame(uint8_t status, uint8_t id, enum endpoints endpoint,
+		uint8_t *buf, size_t nbytes);
 #endif

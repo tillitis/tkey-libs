@@ -33,6 +33,10 @@ void write(enum ioend dest, const uint8_t *buf, size_t nbytes);
 int read(enum ioend src, uint8_t *buf, size_t bufsize, size_t nbytes);
 int readselect(int bitmask, bool non_blocking, enum ioend *endpoint,
 	       uint8_t *len);
+int discard(enum ioend src, size_t nbytes);
+int serial_write(const uint8_t *buf, size_t nbytes);
+int serial_read(uint8_t *buf, size_t bufsize, size_t nbytes);
+int serial_discard(size_t nbytes);
 void putchar(enum ioend dest, const uint8_t ch);
 void puthex(enum ioend dest, const uint8_t ch);
 void putinthex(enum ioend dest, const uint32_t n);

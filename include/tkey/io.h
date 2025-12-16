@@ -31,7 +31,7 @@ enum ch552cmd {
 
 void write(enum ioend dest, const uint8_t *buf, size_t nbytes);
 int read(enum ioend src, uint8_t *buf, size_t bufsize, size_t nbytes);
-int read_serial(uint8_t *buf, size_t bufsize, size_t nbytes);
+int serial_read(uint8_t *buf, size_t bufsize, size_t nbytes);
 int uart_read(uint8_t *buf, size_t bufsize, size_t nbytes);
 int readselect(int bitmask, bool non_blocking, enum ioend *endpoint,
 	       uint8_t *len);

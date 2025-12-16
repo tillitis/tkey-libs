@@ -60,6 +60,14 @@ The I/O functions has changed accordingly. Please use:
 All functions above, except `readselect()`, works with Bellatrix if
 using `IO_UART`, or `IO_QEMU` for `puts()` etc.
 
+### Serial convenience functions
+To make it easier to write applications working on both Bellatrix and
+Castor `serial_read()` and `serial_write()` is added. They use the
+appropriate destination depending on version. The cost is a larger
+binary size. This API only works with either `IO_CDC` or `IO_UART`
+depending on version. They cannot safely be used if additionl
+endpoints is enabled via `config_endpoints()`.
+
 ### Debug prints
 
 The optionally built debug prints have changed. You now use

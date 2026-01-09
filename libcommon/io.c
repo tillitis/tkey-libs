@@ -162,10 +162,12 @@ int read(enum ioend src, uint8_t *buf, size_t bufsize, size_t nbytes)
 	return n;
 }
 
-// uart_read reads blockingly into buf o size bufsize from UART nbytes
-// bytes.
+// uart_read reads nbytes bytes from the UART into buf of size bufsize, blocking
+// until all bytes are read.
 //
-// Returns negative on error.
+// Use write(IO_UART,..) for accompanying writes to the UART.
+//
+// Returns 0 on success, negative on error.
 int uart_read(uint8_t *buf, size_t bufsize, size_t nbytes)
 {
 	if (nbytes > bufsize) {

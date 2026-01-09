@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2025 Tillitis AB <tillitis.se>
 // SPDX-License-Identifier: BSD-2-Clause
 
+#include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 #include <tkey/assert.h>
@@ -161,10 +162,12 @@ int read(enum ioend src, uint8_t *buf, size_t bufsize, size_t nbytes)
 	return n;
 }
 
-// uart_read reads blockingly into buf o size bufsize from UART nbytes
-// bytes.
+// uart_read reads nbytes bytes from the UART into buf of size bufsize, blocking
+// until all bytes are read.
 //
-// Returns negative on error.
+// Use write(IO_UART,..) for accompanying writes to the UART.
+//
+// Returns 0 on success, negative on error.
 int uart_read(uint8_t *buf, size_t bufsize, size_t nbytes)
 {
 	if (nbytes > bufsize) {
@@ -175,6 +178,39 @@ int uart_read(uint8_t *buf, size_t bufsize, size_t nbytes)
 		buf[n] = readbyte();
 	}
 
+	return 0;
+}
+
+// serial_read blocks and returns when nbytes is read from the cdc endpoint.
+// Returns zero on success.
+//
+// serial_read does not handle interleaved frames from different endpoints, and
+// hence should only be used with IO_CDC set via config_endpoints() (default).
+//
+// Use write(IO_CDC,..) for accompanying writes to the CDC endpoint.
+//
+// The allocated size of buf, bufsize, needs to be equal or greater than
+// nbytes. Otherwise no data will be read and an error will be returned.
+int serial_read(uint8_t *buf, size_t bufsize, size_t nbytes)
+{
+	uint8_t available = 0;
+	enum ioend endpoint = IO_NONE;
+
+	for (size_t n = 0; n < nbytes;) {
+		if (readselect(IO_CDC, false, &endpoint, &available) < 0) {
+			return -1;
+		}
+
+		// Read as much as is available of what we expect from
+		// the frame.
+		available = available > nbytes ? nbytes : available;
+
+		int rd = read(IO_CDC, &buf[n], bufsize - n, available);
+		if (rd < 0) {
+			return -1;
+		}
+		n += rd;
+	}
 	return 0;
 }
 
@@ -220,7 +256,8 @@ static int discard(size_t nbytes)
 // available. Indicates how many bytes available in len.
 //
 // Returns non-zero on error.
-int readselect(int bitmask, enum ioend *endpoint, uint8_t *len)
+int readselect(int bitmask, bool non_blocking, enum ioend *endpoint,
+	       uint8_t *len)
 {
 	if ((bitmask & IO_UART) || (bitmask & IO_QEMU)) {
 		// Not possible to use readselect() on these
@@ -239,6 +276,14 @@ int readselect(int bitmask, enum ioend *endpoint, uint8_t *len)
 		// - If in the bitmask, return the first endpoint with
 		//   data available and indicate how much data in len.
 		if (cur_endpoint.len == 0) {
+			// Check if readselect should block
+			if (non_blocking) {
+
+				if (!*can_rx) {
+					*len = 0;
+					return 0;
+				}
+			}
 			// Read USB Mode Protocol header:
 			//   1 byte mode
 			//   1 byte length

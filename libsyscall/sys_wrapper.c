@@ -137,6 +137,16 @@ int sys_preload_get_metadata(uint8_t digest[32], uint8_t signature[64],
 		       (uint32_t)signature, (uint32_t)pubkey);
 }
 
+// Stores `pubkey` for app in flash slot 1
+//
+// Only available for the verified management app.
+//
+// Returns 0 on success.
+int sys_preload_set_pubkey(uint8_t pubkey[32])
+{
+	return syscall(TK1_SYSCALL_PRELOAD_SET_PUBKEY, (uint32_t)pubkey, 0, 0);
+}
+
 // Returns filesystem status. Non-zero when problems have been
 // detected, so far only that the first copy of the partition table
 // didn't pass checks.

@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2025 Tillitis AB <tillitis.se>
 // SPDX-License-Identifier: BSD-2-Clause
 
+#include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 #include <tkey/assert.h>
@@ -220,7 +221,8 @@ static int discard(size_t nbytes)
 // available. Indicates how many bytes available in len.
 //
 // Returns non-zero on error.
-int readselect(int bitmask, enum ioend *endpoint, uint8_t *len)
+int readselect(int bitmask, bool non_blocking, enum ioend *endpoint,
+	       uint8_t *len)
 {
 	if ((bitmask & IO_UART) || (bitmask & IO_QEMU)) {
 		// Not possible to use readselect() on these
@@ -239,6 +241,14 @@ int readselect(int bitmask, enum ioend *endpoint, uint8_t *len)
 		// - If in the bitmask, return the first endpoint with
 		//   data available and indicate how much data in len.
 		if (cur_endpoint.len == 0) {
+			// Check if readselect should block
+			if (non_blocking) {
+
+				if (!*can_rx) {
+					*len = 0;
+					return 0;
+				}
+			}
 			// Read USB Mode Protocol header:
 			//   1 byte mode
 			//   1 byte length

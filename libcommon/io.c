@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2025 Tillitis AB <tillitis.se>
 // SPDX-License-Identifier: BSD-2-Clause
 
+#include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 #include <tkey/assert.h>
@@ -194,17 +195,17 @@ static int discard(size_t nbytes)
 	return n;
 }
 
-// readselect blocks and returns when there is something readable from
-// some mode.
+// readselect optionally blocks and returns when there is something readable
+// from some mode.
 //
 // Use like this:
 //
-//   readselect(IO_CDC|IO_FIDO, &endpoint, &len)
+//   readselect(IO_CDC|IO_FIDO, false, &endpoint, &len)
 //
 // to wait for some data from either the CDC or the FIDO endpoint.
 //
 // NOTE WELL: You need to call readselect() first, before doing any
-// calls to read().
+// calls to read() if using Castor.
 //
 // Only endpoints available for read are:
 //
@@ -216,11 +217,19 @@ static int discard(size_t nbytes)
 //
 // If you need blocking low-level UART reads, use uart_read() instead.
 //
-// Sets endpoint of the first endpoint in the bitmask with data
-// available. Indicates how many bytes available in len.
+// When readselect is used with non_blocking set to true, it will either return
+// zero or the entire header. As soon as the first byte is read, it waits
+// for the next before returning.
+//
+// If readselect reads data from an endpoint not set in bitmask, it will be
+// discarded.
+//
+// When reading data from an endpoint in bitmask the source of the data is
+// returned in *endpoint and the length is returned in *len.
 //
 // Returns non-zero on error.
-int readselect(int bitmask, enum ioend *endpoint, uint8_t *len)
+int readselect(int bitmask, bool non_blocking, enum ioend *endpoint,
+	       uint8_t *len)
 {
 	if ((bitmask & IO_UART) || (bitmask & IO_QEMU)) {
 		// Not possible to use readselect() on these
@@ -239,6 +248,11 @@ int readselect(int bitmask, enum ioend *endpoint, uint8_t *len)
 		// - If in the bitmask, return the first endpoint with
 		//   data available and indicate how much data in len.
 		if (cur_endpoint.len == 0) {
+			// Check if readselect should block
+			if (non_blocking && !*can_rx) {
+				*len = 0;
+				return 0;
+			}
 			// Read USB Mode Protocol header:
 			//   1 byte mode
 			//   1 byte length

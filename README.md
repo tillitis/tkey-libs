@@ -60,7 +60,7 @@ specification](https://reuse.software/).
 
 Please note that:
 
-- For reading, only use the blocking `uart_read()`.
+- For reading, only use the blocking `read(IO_UART,..)`.
 
 - Only `IO_UART` and `IO_QEMU` destinations are useful for writing as
   in `write(IO_UART, ...)`, `puts(IO_UART, ...)`, and so on.

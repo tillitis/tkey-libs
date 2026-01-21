@@ -45,7 +45,7 @@ The I/O functions has changed accordingly. Please use:
 - `readselect()` with appropriate bitmask (e.g. `IO_CDC|IO_FIDO`) to
   see if there's anything to read in the endpoints you are interested
   in. Data from endpoints not mentioned in the bitmask will be
-  discarded.
+  discarded. Castor only function.
 
 - `read()` is now non-blocking and returns the number of bytes read
   from the endpoint you specify, because more might not be available
@@ -57,13 +57,8 @@ The I/O functions has changed accordingly. Please use:
   `putinthex()`, and `hexdump()` functions that take a destination
   argument.
 
-We recommend you use only these functions for I/O on Castor and going
-forward.
-
-For compatibility to develop device apps for the Bellatrix platform
-and earlier, use the low-level, blocking function `uart_read()` for
-reads and *only* the `IO_UART` and `IO_QEMU` destinations for output
-functions like `write()`, `puts()`.
+All functions above, except `readselect()`, works with Bellatrix if
+using `IO_UART`, or `IO_QEMU` for `puts()` etc.
 
 ### Debug prints
 

@@ -133,7 +133,12 @@ static uint8_t readbyte(void)
 }
 
 // read reads into buf of size bufsize from UART, nbytes or less, from
-// the current USB endpoint. It doesn't block.
+// USB endpoint src.
+//
+// If used with the USB-mode protocol and readselect(), it doesn't block.
+// Only for version > Bellatrix.
+//
+// If called with IO_UART it will do low-level UART access, blockingly.
 //
 // Returns the number of bytes read. Empty data returns 0.
 int read(enum ioend src, uint8_t *buf, size_t bufsize, size_t nbytes)
@@ -142,9 +147,16 @@ int read(enum ioend src, uint8_t *buf, size_t bufsize, size_t nbytes)
 		return -1;
 	}
 
-	if (src == IO_NONE || src == IO_UART || src == IO_QEMU) {
+	if (src == IO_NONE || src == IO_QEMU) {
 		// Destination only endpoints
 		return -1;
+	}
+	int n = 0;
+	if (src == IO_UART) {
+		for (n = 0; n < nbytes; n++) {
+			buf[n] = readbyte();
+		}
+		return n;
 	}
 
 	if (src != cur_endpoint.endpoint) {
@@ -152,31 +164,12 @@ int read(enum ioend src, uint8_t *buf, size_t bufsize, size_t nbytes)
 		return 0;
 	}
 
-	int n = 0;
-
 	for (n = 0; n < nbytes && cur_endpoint.len > 0; n++) {
 		buf[n] = readbyte();
 		cur_endpoint.len--;
 	}
 
 	return n;
-}
-
-// uart_read reads blockingly into buf o size bufsize from UART nbytes
-// bytes.
-//
-// Returns negative on error.
-int uart_read(uint8_t *buf, size_t bufsize, size_t nbytes)
-{
-	if (nbytes > bufsize) {
-		return -1;
-	}
-
-	for (int n = 0; n < nbytes; n++) {
-		buf[n] = readbyte();
-	}
-
-	return 0;
 }
 
 // discard nbytes of what's available.

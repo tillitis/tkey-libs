@@ -58,12 +58,20 @@
 #define TK1_ROM_SIZE 0x2000
 
 #define TK1_RAM_BASE 0x40000000
+#ifdef BUILD_FOR_QEMU
+#define TK1_RAM_SIZE 0x100000
+#else
 #define TK1_RAM_SIZE 0x20000
+#endif
 
 #define TK1_MMIO_BASE 0xc0000000
 #define TK1_MMIO_SIZE 0x3fffffff
 
+#ifdef BUILD_FOR_QEMU
+#define TK1_APP_MAX_SIZE 0x100000
+#else
 #define TK1_APP_MAX_SIZE 0x20000
+#endif
 
 #define TK1_MMIO_FW_RAM_BASE 0xd0000000
 // FW_RAM is 4096 bytes
@@ -145,4 +153,5 @@
 #define TK1_MMIO_TK1_SPI_EN 0xff000200
 #define TK1_MMIO_TK1_SPI_XFER 0xff000204
 #define TK1_MMIO_TK1_SPI_DATA 0xff000208
+
 #endif

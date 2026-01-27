@@ -1,8 +1,34 @@
 OBJCOPY ?= llvm-objcopy
 
 CC = clang
+AS = clang
+AR = llvm-ar
 
-INCLUDE=include
+INCLUDE = include
+
+CFLAGS = \
+	-target riscv32-unknown-none-elf \
+	-march=rv32iczmmul \
+	-mabi=ilp32 \
+	-mcmodel=medany \
+	-ffunction-sections \
+	-fdata-sections \
+	-fomit-frame-pointer \
+	-fno-builtin-printf \
+	-fno-builtin-putchar \
+	-ffast-math \
+	-fno-common \
+	-mno-relax \
+	-Wall \
+	-Werror=implicit-function-declaration
+
+CFLAGS += -Os
+#CFLAGS += -O0
+#CFLAGS += -g3
+CFLAGS += -flto
+CFLAGS += -std=gnu99
+CFLAGS += -I $(INCLUDE) -I .
+CFLAGS += -DLFS_NO_MALLOC
 
 # Set QEMU_DEBUG and TKEY_DEBUG below when compiling tkey-libs if you
 # want debug prints from tkey-libs functions.
@@ -15,25 +41,35 @@ INCLUDE=include
 # NOTE WELL: If you just want debug prints on either of them in *your
 # own device app* you just need to include tkey/debug.h and define
 # either of them. You don't need to recompile tkey-libs.
+#
+#CFLAGS += -DQEMU_DEBUG
+#CFLAGS += -DBUILD_FOR_QEMU
 
-CFLAGS = -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 \
-	-mcmodel=medany -static -std=gnu99 -O2 -ffast-math -fno-common \
-	-fno-builtin-printf -fno-builtin-putchar -nostdlib -mno-relax -flto \
-	-Wall -Werror=implicit-function-declaration \
-	-I $(INCLUDE) -I .
+# Set LFS_YES_TRACE below when compiling tkey-libs if you
+# want debug prints from littlefs functions.
+#
+#CFLAGS += -DLFS_YES_TRACE
 
-AS = clang
-AR = llvm-ar
-ASFLAGS = -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 \
-	-mcmodel=medany -mno-relax
+ASFLAGS = \
+	-target riscv32-unknown-none-elf \
+	-march=rv32iczmmul \
+	-mabi=ilp32 \
+	-mcmodel=medany \
+	-mno-relax
 
-LDFLAGS=-T app.lds -L libcommon/ -lcommon -L libcrt0/ -lcrt0
-
+LDFLAGS = \
+	-static \
+	-nostdlib \
+	-T app.lds \
+	-L libcommon/ \
+	-lcommon \
+	-L libcrt0/ \
+	-lcrt0
 
 .PHONY: all
-all: libcrt0.a libcommon.a libsyscall.a libmonocypher.a libblake2s.a
+all: libcrt0.a libcommon.a libsyscall.a libmonocypher.a liblfs.a libblake2s.a
 
-IMAGE=ghcr.io/tillitis/tkey-builder:5rc1
+IMAGE = ghcr.io/tillitis/tkey-builder:5rc1
 
 podman:
 	podman run --rm --mount type=bind,source=$(CURDIR),target=/src \
@@ -52,49 +88,57 @@ udiv: libcommon/udiv.c
 # Not checking blake2s_test.c which uses stdio.h we don't have.
 .PHONY: check
 check:
-	$(CLANG_TIDY) -header-filter=.* -checks=clang-analyzer-*,cert-* blake2s/blake2s.c libcommon/*.c libsyscall/*.c monocypher/*.c -- $(CFLAGS)
+	$(CLANG_TIDY) -header-filter=.* -checks=clang-analyzer-*,cert-*  \
+	blake2s/blake2s.c libcommon/*.c libsyscall/*.c monocypher/*.c \
+	-- $(CFLAGS)
 
 # C runtime library
 libcrt0.a: libcrt0/crt0.o
 	$(AR) -qc $@ libcrt0/crt0.o
 
 # System calls
-SYSCALLOBJS=libsyscall/syscall.o libsyscall/sys_wrapper.o
-
+SYSCALLOBJS = libsyscall/syscall.o libsyscall/sys_wrapper.o
 libsyscall.a: $(SYSCALLOBJS)
 	$(AR) -qc $@ $(SYSCALLOBJS)
-
 $(SYSCALLOBJS): include/tkey/syscall.h
 
 # Common C functions
-LIBOBJS=libcommon/assert.o libcommon/led.o libcommon/lib.o \
-	libcommon/proto.o libcommon/touch.o libcommon/io.o libcommon/string.o \
-	libcommon/udiv.o
-
+LIBOBJS = libcommon/assert.o libcommon/io.o libcommon/led.o libcommon/lib.o \
+	libcommon/memchr.o libcommon/memcmp.o libcommon/memcpy.o \
+	libcommon/memset.o libcommon/proto.o libcommon/strchr.o libcommon/strcmp.o \
+	libcommon/strcpy.o libcommon/strcspn.o libcommon/strlen.o \
+	libcommon/strspn.o libcommon/touch.o libcommon/udiv.o
 libcommon.a: $(LIBOBJS)
 	$(AR) -qc $@ $(LIBOBJS)
-$(LIBOBJS): include/tkey/assert.h include/tkey/led.h \
+$(LIBOBJS): include/assert.h include/tkey/led.h \
 	include/tkey/lib.h include/tkey/proto.h include/tkey/tk1_mem.h \
 	include/tkey/touch.h include/tkey/debug.h include/string.h
 
 # Monocypher
-MONOOBJS=monocypher/monocypher.o monocypher/monocypher-ed25519.o
+MONOOBJS = monocypher/monocypher.o monocypher/monocypher-ed25519.o
 libmonocypher.a: $(MONOOBJS)
 	$(AR) -qc $@ $(MONOOBJS)
-$MONOOBJS: monocypher/monocypher-ed25519.h monocypher/monocypher.h
+$(MONOOBJS): monocypher/monocypher-ed25519.h monocypher/monocypher.h
+
+# LittleFS
+LITTLEFSOBJS = littlefs/lfs.o littlefs/lfs_util.o
+liblfs.a: $(LITTLEFSOBJS)
+	$(AR) -qc $@ $(LITTLEFSOBJS)
+$(LITTLEFSOBJS): littlefs/lfs.h littlefs/lfs_util.h
 
 # blake2s
-B2OBJS=blake2s/blake2s.o
+B2OBJS = blake2s/blake2s.o
 libblake2s.a: $(B2OBJS)
 	$(AR) -qc $@ $(B2OBJS)
-$B2OBJS: blake2s/blake2s.h
+$(B2OBJS): blake2s/blake2s.h
 
-LIBS=libcrt0.a libcommon.a libsyscall.a
+LIBS = libcrt0.a libcommon.a libsyscall.a
 
 .PHONY: clean
 clean:
 	rm -f $(LIBS) $(LIBOBJS) libcrt0/crt0.o
 	rm -f libmonocypher.a $(MONOOBJS)
+	rm -f liblfs.a $(LITTLEFSOBJS)
 	rm -f libblake2s.a $(B2OBJS)
 	rm -f libsyscall.a $(SYSCALLOBJS)
 	rm -f udiv
@@ -107,7 +151,7 @@ compile_commands.json:
 	bear -- make all
 
 # Uses ../.clang-format
-FMTFILES=include/tkey/*.h libsyscall/*.c libcommon/*.c
+FMTFILES = include/tkey/*.h libsyscall/*.c libcommon/*.c
 .PHONY: fmt
 fmt:
 	clang-format --dry-run --ferror-limit=0 $(FMTFILES)

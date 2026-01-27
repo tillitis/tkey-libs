@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2025 Glasklar Teknik AB <glasklarteknik.se>
 // SPDX-License-Identifier: BSD-2-Clause
-#include <stdint.h>
 #include <assert.h>
+#include <stdint.h>
 
 _Static_assert(sizeof(unsigned int) == 4, "unsupported int size");
 

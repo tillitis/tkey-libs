@@ -36,4 +36,5 @@ struct frame_header {
 
 uint8_t genhdr(uint8_t id, uint8_t endpoint, uint8_t status, enum cmdlen len);
 int parseframe(uint8_t b, struct frame_header *hdr);
+
 #endif

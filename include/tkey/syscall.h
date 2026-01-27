@@ -65,4 +65,5 @@ int sys_preload_store_fin(size_t len, uint8_t digest[32],
 			  uint8_t signature[64]);
 int sys_get_digsig(uint8_t digest[32], uint8_t signature[64]);
 int sys_status(void);
+
 #endif

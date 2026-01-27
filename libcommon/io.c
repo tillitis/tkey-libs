@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <string.h>
-#include <tkey/assert.h>
+#include <assert.h>
 #include <tkey/debug.h>
 #include <tkey/proto.h>
 #include <tkey/tk1_mem.h>

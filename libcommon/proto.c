@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <tkey/assert.h>
 #include <tkey/io.h>
 #include <tkey/proto.h>
 

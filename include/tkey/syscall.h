@@ -44,7 +44,7 @@ enum syscall_num {
 	TK1_SYSCALL_PRELOAD_STORE = 8,
 	TK1_SYSCALL_PRELOAD_STORE_FIN = 9,
 	TK1_SYSCALL_PRELOAD_DELETE = 10,
-	TK1_SYSCALL_PRELOAD_GET_DIGSIG = 11,
+	TK1_SYSCALL_PRELOAD_GET_METADATA = 11,
 	TK1_SYSCALL_REG_MGMT = 12,
 	TK1_SYSCALL_STATUS = 13,
 	TK1_SYSCALL_GET_APP_DATA = 14,
@@ -63,7 +63,7 @@ int sys_preload_delete(void);
 int sys_preload_store(uint32_t offset, void *app, size_t len);
 int sys_preload_store_fin(size_t len, uint8_t digest[32],
 			  uint8_t signature[64]);
-int sys_get_digsig(uint8_t digest[32], uint8_t signature[64],
-		   uint8_t pubkey[32]);
+int sys_preload_get_metadata(uint8_t digest[32], uint8_t signature[64],
+			     uint8_t pubkey[32]);
 int sys_status(void);
 #endif

@@ -130,10 +130,10 @@ int sys_preload_store_fin(size_t len, uint8_t digest[32], uint8_t signature[64])
 // available for the verified management app.
 //
 // Returns 0 on success.
-int sys_get_digsig(uint8_t digest[32], uint8_t signature[64],
-		   uint8_t pubkey[32])
+int sys_preload_get_metadata(uint8_t digest[32], uint8_t signature[64],
+			     uint8_t pubkey[32])
 {
-	return syscall(TK1_SYSCALL_PRELOAD_GET_DIGSIG, (uint32_t)digest,
+	return syscall(TK1_SYSCALL_PRELOAD_GET_METADATA, (uint32_t)digest,
 		       (uint32_t)signature, (uint32_t)pubkey);
 }
 

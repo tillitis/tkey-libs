@@ -1,9 +1,9 @@
 // SPDX-FileCopyrightText: 2022 Tillitis AB <tillitis.se>
 // SPDX-License-Identifier: BSD-2-Clause
 
+#include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <tkey/assert.h>
 #include <tkey/debug.h>
 #include <tkey/proto.h>
 #include <tkey/tk1_mem.h>

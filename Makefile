@@ -69,13 +69,14 @@ $(SYSCALLOBJS): include/tkey/syscall.h
 # Common C functions
 LIBOBJS=libcommon/assert.o libcommon/led.o libcommon/lib.o \
 	libcommon/proto.o libcommon/touch.o libcommon/io.o libcommon/string.o \
-	libcommon/udiv.o
+	libcommon/udiv.o libcommon/timer.o
 
 libcommon.a: $(LIBOBJS)
 	$(AR) -qc $@ $(LIBOBJS)
 $(LIBOBJS): include/tkey/assert.h include/tkey/led.h \
 	include/tkey/lib.h include/tkey/proto.h include/tkey/tk1_mem.h \
-	include/tkey/touch.h include/tkey/debug.h include/string.h
+	include/tkey/touch.h include/tkey/debug.h include/string.h \
+	include/tkey/timer.h
 
 # Monocypher
 MONOOBJS=monocypher/monocypher.o monocypher/monocypher-ed25519.o

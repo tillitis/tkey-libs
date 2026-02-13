@@ -49,6 +49,7 @@ enum syscall_num {
 	TK1_SYSCALL_STATUS = 13,
 	TK1_SYSCALL_GET_APP_DATA = 14,
 	TK1_SYSCALL_PRELOAD_SET_PUBKEY = 15,
+	TK1_SYSCALL_ERASE_AREAS = 16,
 };
 
 int syscall(uint32_t number, uint32_t arg1, uint32_t arg2, uint32_t arg3);
@@ -68,4 +69,5 @@ int sys_preload_get_metadata(uint8_t digest[32], uint8_t signature[64],
 			     uint8_t pubkey[32]);
 int sys_preload_set_pubkey(uint8_t pubkey[32]);
 int sys_status(void);
+int sys_erase_areas(void);
 #endif

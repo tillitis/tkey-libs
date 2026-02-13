@@ -154,3 +154,9 @@ int sys_status(void)
 {
 	return syscall(TK1_SYSCALL_STATUS, 0, 0, 0);
 }
+
+// Erase all app storage areas. Privileged op. Returns 0 on success.
+int sys_erase_areas(void)
+{
+	return syscall(TK1_SYSCALL_ERASE_AREAS, 0, 0, 0);
+}

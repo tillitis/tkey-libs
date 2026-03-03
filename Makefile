@@ -56,12 +56,14 @@ check:
 
 # C runtime library
 libcrt0.a: libcrt0/crt0.o
+	-rm -f $@
 	$(AR) -qc $@ libcrt0/crt0.o
 
 # System calls
 SYSCALLOBJS=libsyscall/syscall.o libsyscall/sys_wrapper.o
 
 libsyscall.a: $(SYSCALLOBJS)
+	-rm -f $@
 	$(AR) -qc $@ $(SYSCALLOBJS)
 
 $(SYSCALLOBJS): include/tkey/syscall.h
@@ -72,6 +74,7 @@ LIBOBJS=libcommon/assert.o libcommon/led.o libcommon/lib.o \
 	libcommon/udiv.o libcommon/timer.o
 
 libcommon.a: $(LIBOBJS)
+	-rm -f $@
 	$(AR) -qc $@ $(LIBOBJS)
 $(LIBOBJS): include/tkey/assert.h include/tkey/led.h \
 	include/tkey/lib.h include/tkey/proto.h include/tkey/tk1_mem.h \
@@ -81,12 +84,14 @@ $(LIBOBJS): include/tkey/assert.h include/tkey/led.h \
 # Monocypher
 MONOOBJS=monocypher/monocypher.o monocypher/monocypher-ed25519.o
 libmonocypher.a: $(MONOOBJS)
+	-rm -f $@
 	$(AR) -qc $@ $(MONOOBJS)
 $MONOOBJS: monocypher/monocypher-ed25519.h monocypher/monocypher.h
 
 # blake2s
 B2OBJS=blake2s/blake2s.o
 libblake2s.a: $(B2OBJS)
+	-rm -f $@
 	$(AR) -qc $@ $(B2OBJS)
 $B2OBJS: blake2s/blake2s.h
 

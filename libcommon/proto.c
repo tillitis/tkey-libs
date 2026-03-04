@@ -124,7 +124,7 @@ int frame_parse_hdr(uint8_t b, struct frame_header *hdr)
 // Does not handle interleaved frames from different endpoints, and
 // hence should only be used with IO_CDC set via config_endpoints() (default).
 //
-// Returns zero on success, negative on error.
+// Returns number of bytes read on success, negative on error.
 int frame_read(uint8_t *buf, size_t bufsize, struct frame_header *hdr)
 {
 	uint8_t in = 0;

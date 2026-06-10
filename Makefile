@@ -22,10 +22,13 @@ CFLAGS = \
 	-Wall \
 	-Werror=implicit-function-declaration
 
+ifdef QEMU
+CFLAGS += -O0
+CFLAGS += -g3
+else
 CFLAGS += -Os
-#CFLAGS += -O0
-#CFLAGS += -g3
 CFLAGS += -flto
+endif
 CFLAGS += -std=gnu99
 CFLAGS += -I $(INCLUDE) -I .
 CFLAGS += -DLFS_NO_MALLOC
@@ -42,13 +45,20 @@ CFLAGS += -DLFS_NO_MALLOC
 # own device app* you just need to include tkey/debug.h and define
 # either of them. You don't need to recompile tkey-libs.
 #
-#CFLAGS += -DQEMU_DEBUG
-#CFLAGS += -DBUILD_FOR_QEMU
+ifdef DEBUG
+CFLAGS += -DTKEY_DEBUG
+endif
+ifdef QEMU
+CFLAGS += -DQEMU_DEBUG
+CFLAGS += -DBUILD_FOR_QEMU
+endif
 
 # Set LFS_YES_TRACE below when compiling tkey-libs if you
 # want debug prints from littlefs functions.
 #
-#CFLAGS += -DLFS_YES_TRACE
+ifdef LFS_TRACE
+CFLAGS += -DLFS_YES_TRACE
+endif
 
 ASFLAGS = \
 	-target riscv32-unknown-none-elf \

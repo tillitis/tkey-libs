@@ -18,14 +18,19 @@ CFLAGS = \
 	-fno-builtin-putchar \
 	-ffast-math \
 	-fno-common \
-	-mno-relax \
 	-Wall \
 	-Werror=implicit-function-declaration
 
 ifdef QEMU
+CFLAGS += -mno-relax
 CFLAGS += -O0
 CFLAGS += -g3
+else ifdef DEBUG
+CFLAGS += -mrelax
+CFLAGS += -Oz
+CFLAGS += -flto
 else
+CFLAGS += -mno-relax
 CFLAGS += -Os
 CFLAGS += -flto
 endif
@@ -45,12 +50,12 @@ CFLAGS += -DLFS_NO_MALLOC
 # own device app* you just need to include tkey/debug.h and define
 # either of them. You don't need to recompile tkey-libs.
 #
-ifdef DEBUG
-CFLAGS += -DTKEY_DEBUG
-endif
 ifdef QEMU
 CFLAGS += -DQEMU_DEBUG
 CFLAGS += -DBUILD_FOR_QEMU
+endif
+ifdef DEBUG
+CFLAGS += -DTKEY_DEBUG
 endif
 
 # Set LFS_YES_TRACE below when compiling tkey-libs if you
@@ -65,7 +70,26 @@ ASFLAGS = \
 	-march=rv32iczmmul \
 	-mabi=ilp32 \
 	-mcmodel=medany \
-	-mno-relax
+
+ifdef QEMU
+ASFLAGS += -mno-relax
+ASFLAGS += -O0
+ASFLAGS += -g3
+else ifdef DEBUG
+ASFLAGS += -mrelax
+ASFLAGS += -Oz
+else
+ASFLAGS += -mno-relax
+ASFLAGS += -Os
+endif
+
+ifdef QEMU
+ASFLAGS += -DQEMU_DEBUG
+ASFLAGS += -DBUILD_FOR_QEMU
+endif
+ifdef DEBUG
+ASFLAGS += -DTKEY_DEBUG
+endif
 
 LDFLAGS = \
 	-static \
@@ -75,6 +99,12 @@ LDFLAGS = \
 	-lcommon \
 	-L libcrt0/ \
 	-lcrt0
+
+ifdef QEMU
+else ifdef DEBUG
+LDFLAGS += -Wl,--icf=safe
+else
+endif
 
 .PHONY: all
 all: libcrt0.a libcommon.a libsyscall.a libmonocypher.a liblfs.a libblake2s.a
@@ -115,12 +145,13 @@ libsyscall.a: $(SYSCALLOBJS)
 $(SYSCALLOBJS): include/tkey/syscall.h
 
 # Common C functions
-LIBOBJS = libcommon/assert.o libcommon/io.o libcommon/led.o libcommon/lib.o \
-	libcommon/memchr.o libcommon/memcmp.o libcommon/memcpy.o \
-	libcommon/memmove.o libcommon/memset.o libcommon/proto.o \
-	libcommon/strchr.o libcommon/strcmp.o libcommon/strcpy.o \
-	libcommon/strcspn.o libcommon/strlen.o libcommon/strncmp.o \
-	libcommon/strspn.o libcommon/timer.o libcommon/touch.o libcommon/udiv.o
+LIBOBJS = libcommon/ashldi3.o libcommon/assert.o libcommon/divsi3.o \
+	libcommon/io.o libcommon/led.o libcommon/lib.o libcommon/memchr.o \
+	libcommon/memcmp.o libcommon/memcpy.o libcommon/memmove.o \
+	libcommon/memset.o libcommon/proto.o libcommon/strchr.o \
+	libcommon/strcmp.o libcommon/strcpy.o libcommon/strcspn.o \
+	libcommon/strlen.o libcommon/strncmp.o libcommon/strspn.o \
+	libcommon/timer.o libcommon/touch.o libcommon/udiv.o
 libcommon.a: $(LIBOBJS)
 	-rm -f $@
 	$(AR) -qc $@ $(LIBOBJS)

@@ -10,12 +10,12 @@ static volatile uint32_t* const led = (volatile uint32_t *)TK1_MMIO_TK1_LED;
 
 void led_set(uint32_t ledvalue)
 {
-	*led = ledvalue;
+	*led = ledvalue; // NOLINT(clang-analyzer-core.FixedAddressDereference)
 }
 
 uint32_t led_get()
 {
-	return *led;
+	return *led; // NOLINT(clang-analyzer-core.FixedAddressDereference)
 }
 
 void led_flash_forever(uint32_t ledvalue)
@@ -23,7 +23,7 @@ void led_flash_forever(uint32_t ledvalue)
 	int led_on = 0;
 
 	for (;;) {
-		*led = led_on ? ledvalue : LED_BLACK;
+		*led = led_on ? ledvalue : LED_BLACK; // NOLINT(clang-analyzer-core.FixedAddressDereference)
 		for (volatile int i = 0; i < 800000; i++) {
 		}
 		led_on = !led_on;

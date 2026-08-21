@@ -50,6 +50,7 @@ static volatile uint32_t* const ver	= (volatile uint32_t *) TK1_MMIO_TK1_VERSION
 static void writebyte(uint8_t b)
 {
 	for (;;) {
+		// NOLINTNEXTLINE(clang-analyzer-core.FixedAddressDereference)
 		if (*can_tx) {
 			*tx = b;
 			return;
@@ -96,6 +97,7 @@ void write(enum ioend dest, const uint8_t *buf, size_t nbytes)
 {
 	if (dest == IO_QEMU) {
 		for (int i = 0; i < nbytes; i++) {
+			// NOLINTNEXTLINE(clang-analyzer-core.FixedAddressDereference)
 			*debugtx = buf[i];
 		}
 
@@ -126,6 +128,7 @@ void write(enum ioend dest, const uint8_t *buf, size_t nbytes)
 static uint8_t readbyte(void)
 {
 	for (;;) {
+		// NOLINTNEXTLINE(clang-analyzer-core.FixedAddressDereference)
 		if (*can_rx) {
 			return *rx;
 		}
@@ -178,6 +181,7 @@ int read(enum ioend src, uint8_t *buf, size_t bufsize, size_t nbytes)
 // to IO_UART when using Bellatrix.
 int serial_write(const uint8_t *buf, size_t nbytes)
 {
+	// NOLINTNEXTLINE(clang-analyzer-core.FixedAddressDereference)
 	if (*ver < TKEY_VERSION_CASTOR) {
 		write(IO_UART, buf, nbytes);
 		return 0;
@@ -202,6 +206,7 @@ int serial_write(const uint8_t *buf, size_t nbytes)
 // nbytes. Otherwise no data will be read and an error will be returned.
 int serial_read(uint8_t *buf, size_t bufsize, size_t nbytes)
 {
+	// NOLINTNEXTLINE(clang-analyzer-core.FixedAddressDereference)
 	if (*ver < TKEY_VERSION_CASTOR) {
 		return read(IO_UART, buf, bufsize, nbytes);
 	}
@@ -243,6 +248,7 @@ int serial_read(uint8_t *buf, size_t bufsize, size_t nbytes)
 // Uses IO_CDC for Castor or IO_UART for Bellatrix.
 int serial_discard(size_t nbytes)
 {
+	// NOLINTNEXTLINE(clang-analyzer-core.FixedAddressDereference)
 	if (*ver < TKEY_VERSION_CASTOR) {
 		return discard(IO_UART, nbytes);
 	}
@@ -367,6 +373,7 @@ int readselect(int bitmask, bool non_blocking, enum ioend *endpoint,
 		//   data available and indicate how much data in len.
 		if (cur_endpoint.len == 0) {
 			// Check if readselect should block
+			// NOLINTNEXTLINE(clang-analyzer-core.FixedAddressDereference)
 			if (non_blocking && !*can_rx) {
 				*len = 0;
 				return 0;

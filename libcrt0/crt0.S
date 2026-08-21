@@ -36,6 +36,15 @@ _start:
 	li x30,0
 	li x31,0
 
+#ifdef TKEY_DEBUG
+	/* initialize global pointer, must be norelax or linker
+	will turn this into "mv gp, gp" */
+	.option push
+	.option norelax
+	la gp, __global_pointer$
+	.option pop
+#endif
+
 	/* init stack below end of ram (TK1_RAM_BASE+TK1_RAM_SIZE) */
 	la sp, _estack
 

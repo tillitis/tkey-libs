@@ -4,7 +4,7 @@
 #ifdef SELF_TEST
 #include <assert.h>
 #else
-#include <tkey/assert.h>
+#include <assert.h>
 #endif
 
 _Static_assert(sizeof(unsigned int) == 4, "unsupported int size");

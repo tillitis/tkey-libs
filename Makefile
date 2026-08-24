@@ -76,7 +76,7 @@ LIBOBJS=libcommon/assert.o libcommon/led.o libcommon/lib.o \
 libcommon.a: $(LIBOBJS)
 	-rm -f $@
 	$(AR) -qc $@ $(LIBOBJS)
-$(LIBOBJS): include/tkey/assert.h include/tkey/led.h \
+$(LIBOBJS): include/assert.h include/tkey/led.h \
 	include/tkey/lib.h include/tkey/proto.h include/tkey/tk1_mem.h \
 	include/tkey/touch.h include/tkey/debug.h include/string.h \
 	include/tkey/timer.h

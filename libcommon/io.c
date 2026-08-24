@@ -2,11 +2,11 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 #include "tkey/platform.h"
+#include <assert.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
-#include <tkey/assert.h>
 #include <tkey/debug.h>
 #include <tkey/proto.h>
 #include <tkey/tk1_mem.h>

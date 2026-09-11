@@ -45,16 +45,16 @@ enum syscall_num {
 	TK1_SYSCALL_PRELOAD_STORE_FIN = 9,
 	TK1_SYSCALL_PRELOAD_DELETE = 10,
 	TK1_SYSCALL_PRELOAD_GET_METADATA = 11,
-	TK1_SYSCALL_REG_MGMT = 12,
+	TK1_SYSCALL_RESERVED = 12,
 	TK1_SYSCALL_STATUS = 13,
-	TK1_SYSCALL_GET_APP_DATA = 14,
+	TK1_SYSCALL_GET_RESET_DATA = 14,
 	TK1_SYSCALL_PRELOAD_SET_PUBKEY = 15,
-	TK1_SYSCALL_ERASE_AREAS = 16,
+	TK1_SYSCALL_ERASE_AREA = 16,
 };
 
 int syscall(uint32_t number, uint32_t arg1, uint32_t arg2, uint32_t arg3);
 int sys_reset(struct reset *rst, size_t len);
-int sys_reset_data(uint8_t next_app_data[RESET_DATA_SIZE]);
+int sys_get_reset_data(uint8_t next_app_data[RESET_DATA_SIZE]);
 int sys_alloc(void);
 int sys_dealloc(void);
 int sys_write(uint32_t offset, void *buf, size_t len);
@@ -69,5 +69,5 @@ int sys_preload_get_metadata(uint8_t digest[32], uint8_t signature[64],
 			     uint8_t pubkey[32]);
 int sys_preload_set_pubkey(uint8_t pubkey[32]);
 int sys_status(void);
-int sys_erase_areas(void);
+int sys_erase_area(uint8_t area);
 #endif

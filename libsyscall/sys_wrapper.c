@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2025 Tillitis AB <tillitis.se>
 // SPDX-License-Identifier: BSD-2-Clause
 
+#include <stdint.h>
 #include <tkey/syscall.h>
 
 // Reset the TKey. Leave the reset type (enum reset_start) in rst as
@@ -21,9 +22,10 @@ int sys_reset(struct reset *rst, size_t len)
 // RESET_DATA_SIZE bytes.
 //
 // Returns 0 on success.
-int sys_reset_data(uint8_t next_app_data[RESET_DATA_SIZE])
+int sys_get_reset_data(uint8_t next_app_data[RESET_DATA_SIZE])
 {
-	return syscall(TK1_SYSCALL_GET_APP_DATA, (uint32_t)next_app_data, 0, 0);
+	return syscall(TK1_SYSCALL_GET_RESET_DATA, (uint32_t)next_app_data, 0,
+		       0);
 }
 
 // Allocate a flash area for the current app. Must be done before sys_write()
@@ -155,8 +157,8 @@ int sys_status(void)
 	return syscall(TK1_SYSCALL_STATUS, 0, 0, 0);
 }
 
-// Erase all app storage areas. Privileged op. Returns 0 on success.
-int sys_erase_areas(void)
+// Erases a storage area. Privileged syscall. Returns 0 on success.
+int sys_erase_area(uint8_t area)
 {
-	return syscall(TK1_SYSCALL_ERASE_AREAS, 0, 0, 0);
+	return syscall(TK1_SYSCALL_ERASE_AREA, (uint32_t)area, 0, 0);
 }

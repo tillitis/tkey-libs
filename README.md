@@ -7,7 +7,7 @@
 - Common C functions including protocol calls: libcommon.
 - Cryptographic functions: libmonocypher. Based on
   [Monocypher](https://github.com/LoupVaillant/Monocypher) version
-  4.0.2
+  4.0.3
 - BLAKE2s hash function: libblake2s.
 
 Release notes in [RELEASE.md](RELEASE.md).

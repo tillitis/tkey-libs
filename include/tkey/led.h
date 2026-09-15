@@ -18,4 +18,6 @@
 uint32_t led_get(void);
 void led_set(uint32_t ledvalue);
 void led_flash_forever(uint32_t ledvalue);
+void led_indicate_busy(uint32_t ledvalue);
+void led_indicate_idle(void);
 #endif

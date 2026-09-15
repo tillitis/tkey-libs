@@ -29,3 +29,15 @@ void led_flash_forever(uint32_t ledvalue)
 		led_on = !led_on;
 	}
 }
+
+// Indicate busy
+//
+// On platforms with multicolor LEDs ledvalue sets the color.
+void led_indicate_busy(uint32_t ledvalue) {
+	led_set(ledvalue);
+}
+
+// Indicate idle
+void led_indicate_idle() {
+	led_set(LED_BLACK);
+}

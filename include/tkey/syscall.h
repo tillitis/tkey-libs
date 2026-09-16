@@ -12,13 +12,10 @@
 
 // Needs to be held synchronized with syscall_num.h in firmware.
 enum reset_start {
-	START_DEFAULT = 0, // Probably cold boot
-	START_FLASH0 = 1,
-	START_FLASH1 = 2,
-	START_FLASH0_VER = 3,
-	START_FLASH1_VER = 4,
-	START_CLIENT = 5,
-	START_CLIENT_VER = 6,
+	START_FLASH0 = 0,
+	START_FLASH1_VER = 1,
+	START_CLIENT = 2,
+	START_CLIENT_VER = 3,
 };
 
 #define RESET_NEXT 0x01

@@ -25,6 +25,15 @@
 #define debug_puthex(ch) puthex(IO_DEBUG, ch)
 #define debug_hexdump(buf, len) hexdump(IO_DEBUG, buf, len)
 
+#elif defined(BBUART_DEBUG)
+
+#define debug_putchar(ch) putchar(IO_BBUART, ch)
+#define debug_lf() putchar(IO_BBUART, '\n')
+#define debug_putinthex(ch) putinthex(IO_BBUART, ch)
+#define debug_puts(s) puts(IO_BBUART, s)
+#define debug_puthex(ch) puthex(IO_BBUART, ch)
+#define debug_hexdump(buf, len) hexdump(IO_BBUART, buf, len)
+
 #else
 
 #define debug_putchar(ch)

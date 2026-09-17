@@ -10,7 +10,7 @@ CFLAGS = -g -target riscv32-unknown-none-elf -march=rv32iczmmul -mabi=ilp32 -mcm
    -fno-builtin-putchar -nostdlib -mno-relax -flto \
    -Wall -Werror=implicit-function-declaration \
    -I $(LIBDIR)/include -I $(LIBDIR)
-   # -DQEMU_DEBUG -DTKEY_DEBUG
+   # -DQEMU_DEBUG -DTKEY_DEBUG -DBBUART_DEBUG
 
 INCLUDE=$(LIBDIR)/include
 

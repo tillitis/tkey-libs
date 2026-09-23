@@ -25,4 +25,6 @@
 void assert_fail(enum ioend dest, const char *assertion, const char *file,
 		 unsigned int line, const char *function);
 void assert_halt(void);
+
+#define static_assert(condition, message) _Static_assert(condition, message)
 #endif

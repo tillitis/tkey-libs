@@ -27,9 +27,8 @@ sources.
 
 Imported sources:
 
-- [Monocypher](https://github.com/LoupVaillant/Monocypher) (BSD-2) by
-  Loup Vaillant.
-
+- [Monocypher](https://github.com/LoupVaillant/Monocypher)
+  (BSD-2/CC-0) by Loup Vaillant.
 - blake2s (CC-0), originally based on the reference implementation in
   [RFC 7693](https://www.rfc-editor.org/rfc/rfc7693.html) written by
   Markku-Juhani O. Saarinen ([original

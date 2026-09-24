@@ -69,7 +69,7 @@ libsyscall.a: $(SYSCALLOBJS)
 $(SYSCALLOBJS): include/tkey/syscall.h
 
 # Common C functions
-LIBOBJS=libcommon/assert.o libcommon/led.o libcommon/lib.o \
+LIBOBJS=libcommon/assert.o libcommon/bbuart.o libcommon/led.o libcommon/lib.o \
 	libcommon/proto.o libcommon/touch.o libcommon/io.o libcommon/string.o \
 	libcommon/udiv.o libcommon/timer.o
 

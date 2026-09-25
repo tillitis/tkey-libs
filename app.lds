@@ -60,5 +60,7 @@ SECTIONS
 		_ebss = .;
 	} >RAM
 
+	_estack = ORIGIN(RAM) + LENGTH(RAM) - 16;
+
 	/* libcrt0/crt0.S inits stack to start just below end of RAM */
 }

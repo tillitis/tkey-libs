@@ -37,3 +37,14 @@ path = [
 
 SPDX-FileCopyrightText = "2014 Secworks Sweden AB"
 SPDX-License-Identifier = "BSD-2-Clause"
+
+[[annotations]]
+path = [
+     "littlefs/*",
+]
+
+SPDX-FileCopyrightText = [
+     "2022, The littlefs authors.",
+     "2017, Arm Limited.",
+]
+SPDX-License-Identifier = "BSD-3-Clause"

@@ -7,6 +7,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <tkey/assert.h>
+#include <tkey/bbuart.h>
 #include <tkey/debug.h>
 #include <tkey/proto.h>
 #include <tkey/tk1_mem.h>
@@ -92,6 +93,9 @@ static void write_with_header(enum ioend dest, const uint8_t *buf,
 //
 // - IO_DEBUG: Through the UART for the DEBUG endpoint (USB HID), with
 //   header.
+//
+// - IO_BBUART: Through the bit banged UART using GPIO3, no USB Mode Header
+//   added.
 void write(enum ioend dest, const uint8_t *buf, size_t nbytes)
 {
 	if (dest == IO_QEMU) {
@@ -103,6 +107,12 @@ void write(enum ioend dest, const uint8_t *buf, size_t nbytes)
 	} else if (dest == IO_UART) {
 		for (int i = 0; i < nbytes; i++) {
 			writebyte(buf[i]);
+		}
+
+		return;
+	} else if (dest == IO_BBUART) {
+		for (int i = 0; i < nbytes; i++) {
+			bbuart_tx_byte(buf[i]);
 		}
 
 		return;
@@ -149,7 +159,7 @@ int read(enum ioend src, uint8_t *buf, size_t bufsize, size_t nbytes)
 		return -1;
 	}
 
-	if (src == IO_NONE || src == IO_QEMU) {
+	if (src == IO_NONE || src == IO_QEMU || src == IO_BBUART) {
 		// Destination only endpoints
 		return -1;
 	}
@@ -287,7 +297,7 @@ int discard(enum ioend src, size_t nbytes)
 {
 	int n = 0;
 
-	if (src == IO_NONE || src == IO_QEMU) {
+	if (src == IO_NONE || src == IO_QEMU || src == IO_BBUART) {
 		// Destination only endpoints
 		return -1;
 	}
@@ -349,7 +359,8 @@ int discard(enum ioend src, size_t nbytes)
 int readselect(int bitmask, bool non_blocking, enum ioend *endpoint,
 	       uint8_t *len)
 {
-	if ((bitmask & IO_UART) || (bitmask & IO_QEMU)) {
+	if ((bitmask & IO_UART) || (bitmask & IO_QEMU) ||
+	    (bitmask & IO_BBUART)) {
 		// Not possible to use readselect() on these
 		// endpoints.
 		return -1;

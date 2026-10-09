@@ -159,7 +159,7 @@ int read(enum ioend src, uint8_t *buf, size_t bufsize, size_t nbytes)
 		return -1;
 	}
 
-	if (src == IO_NONE || src == IO_QEMU) {
+	if (src == IO_NONE || src == IO_QEMU || src == IO_BBUART) {
 		// Destination only endpoints
 		return -1;
 	}
@@ -297,7 +297,7 @@ int discard(enum ioend src, size_t nbytes)
 {
 	int n = 0;
 
-	if (src == IO_NONE || src == IO_QEMU) {
+	if (src == IO_NONE || src == IO_QEMU || src == IO_BBUART) {
 		// Destination only endpoints
 		return -1;
 	}
@@ -359,7 +359,8 @@ int discard(enum ioend src, size_t nbytes)
 int readselect(int bitmask, bool non_blocking, enum ioend *endpoint,
 	       uint8_t *len)
 {
-	if ((bitmask & IO_UART) || (bitmask & IO_QEMU)) {
+	if ((bitmask & IO_UART) || (bitmask & IO_QEMU) ||
+	    (bitmask & IO_BBUART)) {
 		// Not possible to use readselect() on these
 		// endpoints.
 		return -1;

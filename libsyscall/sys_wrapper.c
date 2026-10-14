@@ -84,12 +84,13 @@ int sys_get_vidpid(void)
 }
 
 // Delete the app in flash slot 1. Only available for the verified
-// management app.
+// management app. Sets size, digest and signature to zero. Updates the mac from
+// metadata->mac.
 //
 // Returns 0 on success.
-int sys_preload_delete(void)
+int sys_preload_delete(struct app_metadata *metadata)
 {
-	return syscall(TK1_SYSCALL_PRELOAD_DELETE, 0, 0, 0);
+	return syscall(TK1_SYSCALL_PRELOAD_DELETE, (uint32_t)metadata, 0, 0);
 }
 
 // Store an app, or possibly just a block of an app, from the `app`
@@ -110,43 +111,28 @@ int sys_preload_store(uint32_t offset, void *app, size_t len)
 	return syscall(TK1_SYSCALL_PRELOAD_STORE, offset, (uint32_t)app, len);
 }
 
-// Finalize storing of an app where the complete binary size is `len`
-// in flash slot 1. Returns 0 on success. Only available for the
-// verified management app.
+// Stores the associated metadata for the app in flash slot 1.
 //
-// Compute a BLAKE2s hash digest over the entire binary. Pass the
-// result in `app_digest`.
-//
-// Sign `app_digest` with your Ed25519 private key and pass the
-// resulting signature in `app_signature`.
-//
-// Returns 0 on success.
-int sys_preload_store_fin(size_t len, uint8_t digest[32], uint8_t signature[64])
-{
-	return syscall(TK1_SYSCALL_PRELOAD_STORE_FIN, len, (uint32_t)digest,
-		       (uint32_t)signature);
-}
-
-// Copies the digest, signature and pubkey for app in flash slot 1 to
-// `app_digest`, `app_signature` and `pubkey`. Returns 0 on success. Only
-// available for the verified management app.
-//
-// Returns 0 on success.
-int sys_preload_get_metadata(uint8_t digest[32], uint8_t signature[64],
-			     uint8_t pubkey[32])
-{
-	return syscall(TK1_SYSCALL_PRELOAD_GET_METADATA, (uint32_t)digest,
-		       (uint32_t)signature, (uint32_t)pubkey);
-}
-
-// Stores `pubkey` for app in flash slot 1
+// Use this function when finalize storing of an app or when updating the public
+// key. All data in the `metadata` struct will be written to the partition
+// table.
 //
 // Only available for the verified management app.
-//
 // Returns 0 on success.
-int sys_preload_set_pubkey(uint8_t pubkey[32])
+int sys_preload_set_metadata(struct app_metadata *metadata)
 {
-	return syscall(TK1_SYSCALL_PRELOAD_SET_PUBKEY, (uint32_t)pubkey, 0, 0);
+	return syscall(TK1_SYSCALL_PRELOAD_SET_METADATA, (uint32_t)metadata, 0,
+		       0);
+}
+
+// Copies the app metadata for app in flash slot 1 to `metadata` struct.
+//
+// Only available for the verified management app.
+// Returns 0 on success.
+int sys_preload_get_metadata(struct app_metadata *metadata)
+{
+	return syscall(TK1_SYSCALL_PRELOAD_GET_METADATA, (uint32_t)metadata, 0,
+		       0);
 }
 
 // Returns filesystem status. Non-zero when problems have been

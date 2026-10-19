@@ -26,4 +26,7 @@ void assert_fail(enum ioend dest, const char *assertion, const char *file,
 		 unsigned int line, const char *function)
     __attribute__((noreturn));
 void assert_halt(void) __attribute__((noreturn));
+
+#define static_assert(condition, message) _Static_assert(condition, message)
+
 #endif

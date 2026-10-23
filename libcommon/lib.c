@@ -32,6 +32,9 @@ __attribute__((used)) void *wordcpy(void *dest, const void *src, unsigned n)
 	return dest;
 }
 
+// Copies n 32-bit words from src to dest.
+// destsize specifies the size of dest in 32-bit words.
+// Halts if destsize is less than n.
 void wordcpy_s(void *dest, size_t destsize, const void *src, size_t n)
 {
 	assert(dest != NULL);
@@ -46,6 +49,10 @@ void wordcpy_s(void *dest, size_t destsize, const void *src, size_t n)
 	}
 }
 
+// Copies n 32-bit words from src to dest.
+// destsize specifies the size of dest in 32-bit words.
+// Halts if destsize is less than n.
+// The data in src and dest are accessed through volatile references.
 void wordcpy_s_volatile(volatile void *dest, size_t destsize,
 			volatile const void *src, size_t n)
 {

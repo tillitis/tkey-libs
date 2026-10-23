@@ -12,7 +12,7 @@ void memcpy_s(void *dest, size_t destsize, const void *src, size_t n)
 	assert(src != NULL);
 	assert(destsize >= n);
 
-	uint8_t *src_byte = (uint8_t *)src;
+	const uint8_t *src_byte = (const uint8_t *)src;
 	uint8_t *dest_byte = (uint8_t *)dest;
 
 	for (size_t i = 0; i < n; i++) {
@@ -22,7 +22,7 @@ void memcpy_s(void *dest, size_t destsize, const void *src, size_t n)
 
 __attribute__((used)) void *wordcpy(void *dest, const void *src, unsigned n)
 {
-	uint32_t *src_word = (uint32_t *)src;
+	const uint32_t *src_word = (const uint32_t *)src;
 	uint32_t *dest_word = (uint32_t *)dest;
 
 	for (int i = 0; i < n; i++) {
@@ -38,7 +38,7 @@ void wordcpy_s(void *dest, size_t destsize, const void *src, size_t n)
 	assert(src != NULL);
 	assert(destsize >= n);
 
-	uint32_t *src_word = (uint32_t *)src;
+	const uint32_t *src_word = (const uint32_t *)src;
 	uint32_t *dest_word = (uint32_t *)dest;
 
 	for (size_t i = 0; i < n; i++) {
@@ -53,7 +53,7 @@ void wordcpy_s_volatile(volatile void *dest, size_t destsize,
 	assert(src != NULL);
 	assert(destsize >= n);
 
-	volatile uint32_t *src_word = (volatile uint32_t *)src;
+	volatile const uint32_t *src_word = (volatile const uint32_t *)src;
 	volatile uint32_t *dest_word = (volatile uint32_t *)dest;
 
 	for (size_t i = 0; i < n; i++) {
@@ -63,7 +63,7 @@ void wordcpy_s_volatile(volatile void *dest, size_t destsize,
 
 int memeq(void *dest, const void *src, size_t n)
 {
-	uint8_t *src_byte = (uint8_t *)src;
+	const uint8_t *src_byte = (const uint8_t *)src;
 	uint8_t *dest_byte = (uint8_t *)dest;
 	int res = -1;
 

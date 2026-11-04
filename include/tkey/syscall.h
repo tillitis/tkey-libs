@@ -52,6 +52,7 @@ enum syscall_num {
 	TK1_SYSCALL_STATUS = 12,
 	TK1_SYSCALL_GET_RESET_DATA = 13,
 	TK1_SYSCALL_ERASE_AREA = 14,
+	TK1_SYSCALL_ASSERT_FAIL = 15,
 };
 
 int syscall(uint32_t number, uint32_t arg1, uint32_t arg2, uint32_t arg3);

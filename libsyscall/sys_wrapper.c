@@ -137,6 +137,9 @@ int sys_preload_store(uint32_t offset, void *app, size_t len)
 //
 // `metadata.signature` is the Ed25519 signature over `metadata.digest`.
 //
+// `metadata.name` is a 16-byte data field opaque to the firmware. It may
+// be used by the metadata consumer in its security policy.
+//
 // `metadata.pubkey` is the public key to the private key used for
 // signing.
 //
